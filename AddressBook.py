@@ -1,9 +1,10 @@
-from Fields import Address, Email, Fields, Birthday, Name, Phone  
+from collections import UserDict
+from Fields import Address, Birthday, Email, Name, Phone  
 from datetime import date
 import pickle
 
 
-class AddressBook(Fields):
+class AddressBook(UserDict):
     def __init__(self, filename):
         super().__init__()
         self.filename = filename
