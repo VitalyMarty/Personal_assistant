@@ -46,6 +46,34 @@ class Backup(Storage):
         return self.storage.load_object()
     
 
+"""
+Що необхідно зробити:
+1. Модуль main
+    1.1. Замінити
+
+            contacts = AddressBook("contacts.txt")
+            notes = Notebook("notes.txt")
+
+        на
+            storage_addressbook = Backup(PickleStorage('addressbook.pickle'))
+            storage_notebook = Backup(PickleStorage('notebook.pickle'))
+
+            try:
+                contacts = storage_addressbook.load()
+                notebook = storage_notebook.load()
+            except FileNotFoundError:
+                contacts = AddressBook()
+                notes = Notebook()
+    
+    1.2. До try-except в циклі while додати:
+
+            finally:
+                storage_addressbook.save(contacts)
+                storage_notebook.save(notes) 
+"""
+
+    
+
 # TODO Видалити коли буде не потрібно   
 # Це тестовий if для перевірки працездатності коду. 
 if __name__ == "__main__":
@@ -72,4 +100,7 @@ if __name__ == "__main__":
 
     print(copy_object1.test)
     print(copy_object2.test)
+
+
+
 
