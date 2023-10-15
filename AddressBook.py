@@ -64,9 +64,26 @@ class Record:
     def add_address(self, address: str):
         self.address = Address(address)
 
+    def edit_address(self, new_address: str):
+        if self.address is not None:
+            self.address.value = new_address
+        else:
+            raise ValueError("No address to edit.")
+
+    def remove_address(self):
+        self.address = None
 
     def add_email(self, email: str):
         self.email = Email(email)
+
+    def edit_email(self, new_email: str):
+        if self.email is not None:
+            self.email.value = new_email
+        else:
+            raise ValueError("No email to edit.")
+
+    def remove_email(self):
+        self.email = None
         
     def add_phone(self, number: str)-> None:
         self.phones.append(Phone(number))
@@ -102,6 +119,12 @@ class Record:
 
     def add_birthday(self, birthday: str) -> None:
         self.birthday = Birthday(birthday)
+
+    def edit_birthday(self, new_birthday: str):
+        self.birthday.value = new_birthday
+
+    def remove_birthday(self):
+        self.birthday.value = None
 
     def days_to_birthday(self):
         if self.birthday.value == '':
