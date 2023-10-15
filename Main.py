@@ -1,107 +1,145 @@
-import AddressBook
-import NoteBook
-
-get_help = {
-    'hello': "How can I help you?",
-    'add': "Add a contact to the address book (usage: add name phone birthday)",
-    'change': "Change contact information (usage: change name phone)",
-    'phone': "Get the phone number for a contact (usage: phone name)",
-    'search': "Search for contacts (usage: search query)",
-    'add_note': "Add a note to the notebook (usage: add_note title content tags)",
-    'edit_note': "Edit a note (usage: edit_note title content tags)",
-    'delete_note': "Delete a note (usage: delete_note title)",
-    'list_contacts': "List all contacts",
-    'list_notes': "List all notes",
-    'goodbye': "Exit the program",
-}
+from AddressBook import AddressBook
+from NoteBook import Notebook
 
 def main():
-    contacts = AddressBook()
-    notes = NoteBook()
+    contacts = AddressBook("contacts.txt")
+    notes = Notebook("notes.txt")
 
-    print("Bot assistant is running. Type 'help' to view commands. Type 'exit' to exit.")
+    print("Bot assistant is running.")
     while True:
-        command = input("Enter a command: ")
+        command = input("Type 'help' to view available commands. Type 'exit' to exit.\nEnter a command: ")
         try:
-            result = parse_command(contacts, notes, command)
-            if result:
-                print(result)
+            command_name, command_args = parse_command(contacts, notes, command)
+            if command_name:
+                result = execute_command(command_name, *command_args)
+                if result:
+                    print(result)
         except Exception as e:
             print(f"Error: {str(e)}")
+
+def print_available_commands():
+    print("Available commands:")
+    print("hello: How can I help you?")
+    print("add: Add a contact to the address book (usage: add name phone birthday)")
+    print("change: Change contact information (usage: change name phone)")
+    print("phone: Get the phone number for a contact (usage: phone name)")
+    print("search: Search for contacts (usage: search query)")
+    print("add_note: Add a note to the notebook (usage: add_note title content tags)")
+    print("edit_note: Edit a note (usage: edit_note title content tags)")
+    print("delete_note: Delete a note (usage: delete_note title)")
+    print("list_contacts: List all contacts")
+    print("list_notes: List all notes")
+    print("goodbye: Exit the program")
 
 def parse_command(contacts, notes, command):
     command = command.lower()
     command_parts = command.split()
 
     if command == 'hello':
-        return "How can I help you?"
+        return "hello", ()
     
     elif command.startswith('add '):
         _, data = command.split(' ', 1)
         parts = data.split()
         if len(parts) != 3:
-            return "Provide name, phone, and birthday (if applicable)"
+            return None, ()
         name, phone, birthday = parts
-        return AddressBook.add_contact(contacts, name, phone, birthday)
+        return "add", (contacts, name, phone, birthday)
     
     elif command.startswith('change '):
         _, data = command.split(' ', 1)
         if len(command_parts) != 3:
-            return "Provide name and phone please"
+            return None, ()
         name, phone = data.split()
-        return AddressBook.change_contact(contacts, name, phone)
+        return "change", (contacts, name, phone)
     
     elif command.startswith('phone '):
         if len(command_parts) != 2:
-            return "Provide name please"
+            return None, ()
         name = command_parts[1]
-        return AddressBook.get_phone(contacts, name)
+        return "phone", (contacts, name)
     
     elif command.startswith('search '):
         _, query = command.split(' ', 1)
-        return AddressBook.search_contacts(contacts, query)
+        return "search", (contacts, query)
     
     elif command.startswith('add_note '):
         _, data = command.split(' ', 1)
         title, content, tags = data.split()
-        return NoteBook.add_note(notes, title, content, tags)
+        return "add_note", (notes, title, content, tags)
     
     elif command.startswith('edit_note '):
         _, data = command.split(' ', 1)
         title, content, tags = data.split()
-        return NoteBook.edit_note(notes, title, content, tags)
+        return "edit_note", (notes, title, content, tags)
     
     elif command.startswith('delete_note '):
         if len(command_parts) != 2:
-            return "Provide the title of the note to delete"
+            return None, ()
         title = command_parts[1]
-        return NoteBook.delete_note(notes, title)
+        return "delete_note", (notes, title)
     
     elif command == 'list_contacts':
-        return AddressBook.list_contacts(contacts)
+        return "list_contacts", (contacts,)
     
     elif command == 'list_notes':
-        return NoteBook.list_notes(notes)
+        return "list_notes", (notes,)
     
     elif command in ['goodbye', 'close', 'exit']:
         print("Good bye!")
         AddressBook.backup_data(contacts)
-        NoteBook.backup_data(notes)
+        Notebook.backup_data(notes)
         exit()
         
     elif command == 'help':
-        return get_help_text()
+        print_available_commands()
+        return None, ()
+    
+    return "Unknown command.", ()
 
-    return "Unknown command."
-
-def get_help_text():
-    help_text = "Available commands:\n"
-    for command, description in get_help.items():
-        help_text += f"{command}: {description}\n"
-    return help_text
-
+def execute_command(command_name, *command_args):
+    if command_name == "hello":
+        return "How can I help you?"
+    
+    elif command_name == "add":
+        contacts, name, phone, birthday = command_args
+        return AddressBook.add_contact(contacts, name, phone, birthday)
+    
+    elif command_name == "change":
+        contacts, name, phone = command_args
+        return AddressBook.change_contact(contacts, name, phone)
+    
+    elif command_name == "phone":
+        contacts, name = command_args
+        return AddressBook.get_phone(contacts, name)
+    
+    elif command_name == "search":
+        contacts, query = command_args
+        return AddressBook.search_contacts(contacts, query)
+    
+    elif command_name == "add_note":
+        notes, title, content, tags = command_args
+        return Notebook.add_note(notes, title, content, tags)
+    
+    elif command_name == "edit_note":
+        notes, title, content, tags = command_args
+        return Notebook.edit_note(notes, title, content, tags)
+    
+    elif command_name == "delete_note":
+        notes, title = command_args
+        return Notebook.delete_note(notes, title)
+    
+    elif command_name == "list_contacts":
+        contacts = command_args[0]
+        return AddressBook.list_contacts(contacts)
+    
+    elif command_name == "list_notes":
+        notes = command_args[0]
+        return Notebook.list_notes(notes)
+    
 if __name__ == "__main__":
     main()
+
 
 
 # completer = WordCompleter(command_dict.keys())
