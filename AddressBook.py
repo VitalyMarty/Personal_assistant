@@ -56,9 +56,10 @@ class Record:
             self.add_phone(phone)
 
         if birthday is not None:
-            self.birthday = Birthday(birthday)
-        else:
-            self.birthday = Birthday(None)
+            try:
+                self.birthday = Birthday(birthday)
+            except Exception as e:
+                print(f"Error setting birthday: {e}")
         
     # Реалізація класу
     def add_address(self, address: str):
@@ -118,24 +119,38 @@ class Record:
                 del self.phones[indx]
 
     def add_birthday(self, birthday: str) -> None:
-        self.birthday = Birthday(birthday)
+        try:
+            self.birthday = Birthday(birthday)
+        except Exception as e:
+            print(f"Error setting birthday: {e}")
+
 
     def edit_birthday(self, new_birthday: str):
-        self.birthday.value = new_birthday
+        if self.birthday:
+            try:
+                self.birthday.value = new_birthday
+            except Exception as e:
+                print(f"Error editing birthday: {e}")
+        else:
+            raise ValueError("No birthday to edit.")
 
     def remove_birthday(self):
-        self.birthday.value = None
+        self.birthday = None
 
     def days_to_birthday(self):
-        if self.birthday.value == '':
+        if not self.birthday:
             return None
-        today = date.today()
-        actual_birthday = self.birthday.value.replace(year=today.year)
-        if actual_birthday < today:
-            actual_birthday = self.birthday.value.replace(year=today.year+1)
-        time_to_birthday = abs(actual_birthday - today)
+        try:
+            today = date.today()
+            actual_birthday = self.birthday.value.replace(year=today.year)
+            if actual_birthday < today:
+                actual_birthday = self.birthday.value.replace(year=today.year + 1)
+            time_to_birthday = abs(actual_birthday - today)
 
-        return time_to_birthday.days
+            return time_to_birthday.days
+        except Exception as e:
+            print(f"Error calculating days to birthday: {e}")
+            return None
     
     def __str__(self) -> str:
         days = str(self.days_to_birthday())
