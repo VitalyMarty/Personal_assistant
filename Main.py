@@ -37,7 +37,7 @@ def main():
 
     # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
     contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
-    notes = Notebook() if storage_addressbook.load() is None else storage_notebook.load()
+    notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
 
     try:
         while True:
