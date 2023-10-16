@@ -102,7 +102,7 @@ def goodbye():
     Функція повертає:
     - По будь-якій з цих команд бот завершує свою роботу після того, як виведе у консоль "Good bye!".
     """
-    pass
+    return f'Good Bye!'
 
 
 def hello():
@@ -115,7 +115,7 @@ def hello():
     Функція повертає:
     - Відповідає у консоль "How can I help you?"
     """
-    pass
+    return f'How can I help you?'
 
 
 def sort_dir():
