@@ -3,6 +3,10 @@ from Backup import Backup, PickleStorage
 from Commands import command_dict
 from NoteBook import Notebook
 
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.shortcuts import input_dialog
+
 
 def parse_input(user_input: str) -> str:
     new_input = user_input
@@ -39,11 +43,12 @@ def main():
     contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
     notes = Notebook() if storage_addressbook.load() is None else storage_addressbook.load()
 
+    completer = WordCompleter(command_dict, ignore_case=True)
     try:
         while True:
             
             # Запит у користувача, що зробити
-            user_input = input("\nType 'help' to view available commands. Type 'exit' to exit.\n>>> ")
+            user_input = prompt("\nType 'help' to view available commands. Type 'exit' to exit.\n>>> ", completer=completer)
 
             # Обробка команди від користувача
             result = parse_input(user_input)
