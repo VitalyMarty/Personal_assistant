@@ -1,6 +1,5 @@
 
 
-
 def add():
     """
     add phone <name> <phone>
@@ -70,13 +69,12 @@ def find():
 
 
 def get_help():
-    """
-    help
+    """Show available commands"""
+    message = 'I can do next commands:\n'
+    for count, command in enumerate(command_dict, start=1):
+        message = '\n'.join([message, f'{count}. {command:<10}-{command_dict[command].__doc__}'])
 
-    Функція повертає:
-    -   
-    """
-    pass
+    return message
 
 
 def get_next_birthday():
@@ -94,27 +92,12 @@ def get_next_birthday():
 
 
 def goodbye():
-    """
-    good bye 
-    close 
-    exit 
-
-    Функція повертає:
-    - По будь-якій з цих команд бот завершує свою роботу після того, як виведе у консоль "Good bye!".
-    """
+    """Exit the program"""
     return f'Good Bye!'
 
 
 def hello():
-    """
-    hello
-
-    Функція виконує:
-    - None
-
-    Функція повертає:
-    - Відповідає у консоль "How can I help you?"
-    """
+    """How can I help you?"""
     return f'How can I help you?'
 
 
@@ -141,3 +124,18 @@ def show_all():
     - всі збереженні контакти з номерами телефонів у консоль.
     """
     pass
+
+
+command_dict ={
+    'hello': hello,
+    'exit': goodbye,
+    'close': goodbye,
+    'good bye': goodbye,
+    'help': get_help
+}
+
+
+# TODO Видалити коли буде не потрібно   
+# Це тестовий if для перевірки працездатності коду. 
+if __name__ == "__main__":
+    print(hello.__doc__)

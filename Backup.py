@@ -18,9 +18,13 @@ class PickleStorage(Storage):
             pickle.dump(object, fh)
     
     def load_object(self) -> object:
-        with open(self.filename, 'rb') as fh:
-            object = pickle.load(fh)
-        return object
+        try:
+            with open(self.filename, 'rb') as fh:
+                object = pickle.load(fh)
+            return object
+        except:
+            pass
+        
     
 
 class Backup(Storage):

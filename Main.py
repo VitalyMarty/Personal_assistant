@@ -1,6 +1,7 @@
 from AddressBook import AddressBook
-from NoteBook import Notebook
 from Backup import Backup, PickleStorage
+from Commands import command_dict
+from NoteBook import Notebook
 
 
 # def main():
@@ -21,7 +22,7 @@ from Backup import Backup, PickleStorage
 
 # def print_available_commands():
 #     print("Available commands:")
-#     print("hello: How can I help you?")
+#       print("hello: How can I help you?")
 #     print("add: Add a contact to the address book (usage: add name phone birthday)")
 #     print("change: Change contact information (usage: change name phone)")
 #     print("phone: Get the phone number for a contact (usage: phone name)")
@@ -31,7 +32,7 @@ from Backup import Backup, PickleStorage
 #     print("delete_note: Delete a note (usage: delete_note title)")
 #     print("list_contacts: List all contacts")
 #     print("list_notes: List all notes")
-#     print("goodbye: Exit the program")
+#       print("goodbye: Exit the program")
 
 # def parse_command(contacts, notes, command):
 #     command = command.lower()
@@ -139,18 +140,35 @@ from Backup import Backup, PickleStorage
 #         notes = command_args[0]
 #         return Notebook.list_notes(notes)
 
-def parse_input(user_input: str) -> str:
-    pass
 
-def handler():
-    pass
+def parse_input(user_input: str) -> str:
+    data = ''
+    for key in command_dict:
+        if user_input.strip().lower().startswith(key):
+            command = key
+            data = user_input[len(command):].split()
+            break
+    if data:
+        return handler(command)(data)
+    return handler(command)()
+
+
+def break_func():
+    """
+    Якщо користувач ввів команду якої немає в command_dict, то повертаємо повідомлення
+    """
+    return 'Wrong command!'
+
+
+def handler(command):
+    return command_dict.get(command, break_func)
 
 
 def main():
 
     # Створюємо сховище, де зберігається файл з контактами та нотатками
-    storage_addressbook = Backup(PickleStorage('addressbook.pickle'))
-    storage_notebook = Backup(PickleStorage('notebook.pickle'))
+    storage_addressbook = Backup(PickleStorage('test_addressbook.pickle'))
+    storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
 
 
     # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.

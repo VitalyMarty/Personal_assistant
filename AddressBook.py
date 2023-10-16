@@ -5,10 +5,13 @@ import pickle
 
 
 class AddressBook(UserDict):
-    def __init__(self, filename):
+    # def __init__(self, filename):
+    #     super().__init__()
+    #     self.filename = filename
+    #     self.load_data()
+    def __init__(self):
         super().__init__()
-        self.filename = filename
-        self.load_data()
+
 
     def add_record(self, record):
         self.data[record.name.value] = record
