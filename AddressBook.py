@@ -5,10 +5,10 @@ import pickle
 
 
 class AddressBook(UserDict):
-    def __init__(self, filename):
+
+    def __init__(self):
         super().__init__()
-        self.filename = filename
-        self.load_data()
+
 
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -32,18 +32,6 @@ class AddressBook(UserDict):
             records_chunk = [self.data[record_name] for record_name in record_names[current_index:end_index]]
             yield records_chunk
             current_index = end_index
-
-    def save_data(self):
-        with open(self.filename, 'wb') as file:
-            pickle.dump(self.data, file)
-
-    def load_data(self):
-        try:
-            with open(self.filename, 'rb') as file:
-                self.data = pickle.load(file)
-        except FileNotFoundError:
-            self.data = {}
-
 
 
 class Record:
