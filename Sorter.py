@@ -1,14 +1,14 @@
 import os
 import shutil
-import string
-import transliterate
 import zipfile
+import re
+import string
 
 
-def normalize_filename(name):
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    return ''.join(c for c in name if c in valid_chars)
-
+def normalize(name):
+    name = name.lower()
+    name = re.sub(r'[^a-z0-9.]', '_', name)
+    return name
 
 def process_archive(source_path, destination_path):
     with zipfile.ZipFile(source_path, 'r') as archive:
@@ -27,7 +27,7 @@ def sort_and_rename_files(folder_path):
     for dir in dirs:
         if dir not in ignored_folders:
             source_dir = os.path.join(folder_path, dir)
-            dest_dir = os.path.join(destination_folder, normalize_filename(dir))
+            dest_dir = os.path.join(destination_folder, normalize(dir))
             shutil.move(source_dir, dest_dir)
 
     for file in files:
@@ -35,11 +35,11 @@ def sort_and_rename_files(folder_path):
         source_file = os.path.join(folder_path, file)
 
         if ext == '.zip':
-            dest_folder = os.path.join(destination_folder, 'archives', normalize_filename(name))
+            dest_folder = os.path.join(destination_folder, 'archives', normalize(name))
             os.makedirs(dest_folder, exist_ok=True)
             process_archive(source_file, dest_folder)
         else:
-            latin_name = normalize_filename(name)
+            latin_name = normalize(name)
             dest_file = os.path.join(destination_folder, latin_name + ext)
             shutil.move(source_file, dest_file)
 
@@ -53,6 +53,4 @@ def sort_and_rename_files(folder_path):
     print("Files sorted, renamed, and normalized successfully!")
 
 
-if __name__ == "__main__":
-    folder_path = input("Enter the folder path: ")
-    sort_and_rename_files(folder_path)
+
