@@ -140,31 +140,40 @@ from Backup import Backup, PickleStorage
 #         return Notebook.list_notes(notes)
 
 def parse_input(user_input: str) -> str:
+    pass
 
+def handler():
+    pass
 
 
 def main():
 
+    # Створюємо сховище, де зберігається файл з контактами та нотатками
     storage_addressbook = Backup(PickleStorage('addressbook.pickle'))
     storage_notebook = Backup(PickleStorage('notebook.pickle'))
 
+
+    # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
     contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
     notes = Notebook() if storage_addressbook.load() is None else storage_addressbook.load()
 
     try:
         while True:
-
+            
+            # Запит у користувача, що зробити
             user_input = input("\nType 'help' to view available commands. Type 'exit' to exit.\n>>> ")
-        
-            result = None
 
+            # Обробка команди від користувача
+            result = parse_input(user_input)
 
+            # Вивід результату обробки команди
+            print(result)
 
+            # Умова завершення роботи. Користувач повинен ввести команду: close | exit | good bye
             if result == 'Good Bye!':
                 break
-    except:
-        pass
     finally:
+        # При завершенні роботи зберігаємо contacts та notes
         storage_addressbook.save(contacts)
         storage_notebook.save(notes)
 
