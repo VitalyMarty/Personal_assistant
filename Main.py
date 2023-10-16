@@ -142,15 +142,16 @@ from NoteBook import Notebook
 
 
 def parse_input(user_input: str) -> str:
+    new_input = user_input
     data = ''
     for key in command_dict:
         if user_input.strip().lower().startswith(key):
-            command = key
-            data = user_input[len(command):].split()
+            new_input = key
+            data = user_input[len(new_input):].split()
             break
     if data:
-        return handler(command)(data)
-    return handler(command)()
+        return handler(new_input)(data)
+    return handler(new_input)()
 
 
 def break_func():
