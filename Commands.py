@@ -133,9 +133,3 @@ command_dict ={
     'good bye': goodbye,
     'help': get_help
 }
-
-
-# TODO Видалити коли буде не потрібно   
-# Це тестовий if для перевірки працездатності коду. 
-if __name__ == "__main__":
-    print(hello.__doc__)

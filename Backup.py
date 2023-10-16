@@ -25,7 +25,6 @@ class PickleStorage(Storage):
         except:
             pass
         
-    
 
 class Backup(Storage):
 
@@ -36,35 +35,7 @@ class Backup(Storage):
         return self.storage.save_object(object)
     def load(self):
         return self.storage.load_object()
-    
-
-"""
-Що необхідно зробити:
-1. Модуль main
-    1.1. Замінити
-
-            contacts = AddressBook("contacts.txt")
-            notes = Notebook("notes.txt")
-
-        на
-            storage_addressbook = Backup(PickleStorage('addressbook.pickle'))
-            storage_notebook = Backup(PickleStorage('notebook.pickle'))
-
-            try:
-                contacts = storage_addressbook.load()
-                notebook = storage_notebook.load()
-            except FileNotFoundError:
-                contacts = AddressBook()
-                notes = Notebook()
-    
-    1.2. До try-except в циклі while додати:
-
-            finally:
-                storage_addressbook.save(contacts)
-                storage_notebook.save(notes) 
-"""
-
-    
+       
 
 # TODO Видалити коли буде не потрібно   
 # Це тестовий if для перевірки працездатності коду. 
