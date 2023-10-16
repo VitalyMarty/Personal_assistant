@@ -1,4 +1,4 @@
-
+from datetime import date, timedelta
 
 def add():
     """
@@ -77,18 +77,36 @@ def get_help():
     return message
 
 
-def get_next_birthday():
-    """
-    birthday <name (можна частково)>
+# def get_next_birthday():
+#     """
+#     birthday <name (можна частково)>
     
-    Функція повертає:
-    - Кількість днів до наступного дня народження, якщо в записі вказано день народження.
-    - Повідомлення, що для такого запису еднь народження не задано
-    - Повідомлення, що такого запису <name> не існує.
+#     Функція повертає:
+#     - Кількість днів до наступного дня народження, якщо в записі вказано день народження.
+#     - Повідомлення, що для такого запису еднь народження не задано
+#     - Повідомлення, що такого запису <name> не існує.
     
-    Якщо реалізовувати частковий пошук, то мабуть треба щоб виводило перелік записів, що відповідають критерію.
-    """
-    pass
+#     Якщо реалізовувати частковий пошук, то мабуть треба щоб виводило перелік записів, що відповідають критерію.
+#     """
+#     pass
+
+def find_birthdays_in_x_days(contacts, days):
+    current_date = date.today()
+    target_date = current_date + timedelta(days=days)
+
+    matching_contacts = []
+
+    for contact in contacts:
+        contact_name = contact['name']
+        contact_birthday = contact['birthday']
+        
+        # Перевіряємо, чи день народження потрапляє у вікно з датою target_date
+        if current_date < contact_birthday <= target_date:
+            matching_contacts.append(contact_name)
+    
+    return matching_contacts
+
+
 
 
 def goodbye():
