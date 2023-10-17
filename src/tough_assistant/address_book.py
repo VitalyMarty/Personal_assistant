@@ -101,9 +101,9 @@ class Record:
             return self.email
             
     def remove_phone(self, remove_phone)-> None:
-        for indx, phone in enumerate(self.phones):
+        for i, phone in enumerate(self.phones):
             if phone.value == remove_phone:
-                del self.phones[indx]
+                del self.phones[i]
 
     def add_birthday(self, birthday: str) -> None:
         try:
