@@ -2,6 +2,8 @@ from AddressBook import AddressBook
 from Backup import Backup, PickleStorage
 from Commands import command_dict
 from NoteBook import Notebook
+from Decorators import input_error
+
 
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
@@ -27,7 +29,7 @@ def break_func():
     """
     return 'Wrong command!'
 
-
+@input_error
 def handler(command):
     return command_dict.get(command, break_func)
 
