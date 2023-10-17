@@ -33,6 +33,7 @@ class Backup(Storage):
 
     def save(self, object):
         return self.storage.save_object(object)
+    
     def load(self):
         return self.storage.load_object()
        
