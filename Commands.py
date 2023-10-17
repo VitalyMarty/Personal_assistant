@@ -73,7 +73,9 @@ def get_help():
     """Show available commands"""
     message = 'I can do next commands:\n'
     for count, command in enumerate(command_dict, start=1):
-        message = '\n'.join([message, f'{count}. {command:<10}-{command_dict[command].__doc__}'])
+        if count <= 9:
+            count = f'0{count}'
+        message = '\n'.join([message, f'{count}. {command:<17}-{command_dict[command].__doc__}'])
 
     return message
 
