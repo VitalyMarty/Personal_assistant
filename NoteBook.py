@@ -3,8 +3,6 @@ from Fields import Field
 from datetime import datetime
 import re
 
-from Backup import Backup, PickleStorage
-
 # TODO remove in release
 # class Note(Field):
 #     def __init__(self, value: str) -> None:
@@ -174,10 +172,6 @@ class Notebook(UserDict):
         print(f"Note id {id}.\tTags: {', '.join(str(itm) for itm in self.data[id].tags)} " if len(self.data[id].tags) > 0 else "")
         return msg
 
-# Створюємо сховище, де зберігається файл з контактами та нотатками
-storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
-# Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
-notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
 
 
 
