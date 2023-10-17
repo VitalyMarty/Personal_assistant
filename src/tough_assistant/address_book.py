@@ -80,14 +80,11 @@ class Record:
         self.phones.append(Phone(number))
 
     def edit_phone(self, old_phone: str, new_phone: str)-> None:
-        is_edited = False
         for phone in self.phones:
             if phone.value == old_phone:
                 phone.value = new_phone
-                is_edited = True
-
-        # Якщо номера не існує, то викликається помилка  
-        if not is_edited:
+                break
+        else:
             raise ValueError(f'Phone number - {old_phone} is not exist in contact: {self.name}')    
 
     def find_phone(self, find_phone: str)-> Phone:
