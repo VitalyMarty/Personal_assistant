@@ -90,6 +90,20 @@ class Date(Field):
     pass
 
 
+class User:
+    def __init__(self, name, birthdate):
+        self.name = name
+        self.birthdate = birthdate
+
+    def birthday_greeting(self):
+        today = datetime.date.today()
+        if today.month == self.birthdate.month and today.day == self.birthdate.day:
+            return f"З Днем народження, {self.name}! 🎉🎂"
+        else:
+            return f"Сьогодні не твій День народження, {self.name}."
+
+
+
 
                                                                                             #TODO Видалити вкінці
 # Приклад використання полів.
