@@ -1,7 +1,6 @@
 from collections import UserDict
 from Fields import Address, Birthday, Email, Name, Phone  
-from datetime import date
-import pickle
+from Backup import Backup, PickleStorage
 
 
 class AddressBook(UserDict):
@@ -181,6 +180,8 @@ class Record:
         return f'Record({self.name.value}, {self.phones_repr}, {self.birthday.value})'
     
     
-        
-
+# Створюємо сховище, де зберігається файл з контактами та нотатками
+storage_addressbook = Backup(PickleStorage('test_addressbook.pickle'))
+# Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
+contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
 
