@@ -8,7 +8,6 @@ class AddressBook(UserDict):
 
     def add_record(self, record):
         self.data[record.name.value] = record
-        self.save_data()
 
     def find(self, name):
         return self.data.get(name, None)
@@ -16,7 +15,6 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-            self.save_data()
 
     def iterator(self, chunk_size=10):
         record_names = list(self.data.keys())
