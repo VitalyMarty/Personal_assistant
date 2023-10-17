@@ -1,8 +1,8 @@
-from AddressBook import AddressBook
-from Backup import Backup, PickleStorage
-from Commands import command_dict
-from NoteBook import Notebook
-from Decorators import input_error
+from address_book import AddressBook
+from backup import Backup, PickleStorage
+from commands import command_dict
+from note_book import Notebook
+from decorators import input_error
 
 
 
