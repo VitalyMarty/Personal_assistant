@@ -123,20 +123,20 @@ class Record:
             return self.name.value, days
             
     def search_contacts_by_name(self, name):
-        results = []
+        found_contacts_by_name = []
         for record in self.data.values():
             if record.name.value.lower() == name.lower():
-                results.append(record)
-        return results
+                found_contacts_by_name.append(record)
+        return found_contacts_by_name
 
     def search_contacts_by_phone(self, phone):
-        results = []
+        found_contacts_by_phone = []
         for record in self.data.values():
             for contact_phone in record.phones:
                 if contact_phone.value == phone:
-                    results.append(record)
+                    found_contacts_by_phone.append(record)
                     break
-        return results
+        return found_contacts_by_phone
 
     def __str__(self) -> str:
         days = str(self.days_to_birthday())
