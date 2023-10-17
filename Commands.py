@@ -98,6 +98,7 @@ def goodbye():
 
 def hello():
     """How can I help you?"""
+    raise TypeError('Something wrong')
     return f'How can I help you?'
 
 

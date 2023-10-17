@@ -9,7 +9,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.shortcuts import input_dialog
 
-
+@input_error
 def parse_input(user_input: str) -> str:
     new_input = user_input
     data = ''
@@ -29,7 +29,7 @@ def break_func():
     """
     return 'Wrong command!'
 
-@input_error
+
 def handler(command):
     return command_dict.get(command, break_func)
 
