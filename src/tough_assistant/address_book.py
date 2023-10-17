@@ -106,20 +106,13 @@ class Record:
                 del self.phones[index]
 
     def add_birthday(self, birthday: str) -> None:
-        try:
-            self.birthday = Birthday(birthday)
-        except Exception as e:
-            print(f"Error setting birthday: {e}")
+        self.birthday = Birthday(birthday)
+        return f'Birthday added'
 
 
     def edit_birthday(self, new_birthday: str):
-        if self.birthday:
-            try:
-                self.birthday.value = new_birthday
-            except Exception as e:
-                print(f"Error editing birthday: {e}")
-        else:
-            raise ValueError("No birthday to edit.")
+        self.birthday.value = new_birthday
+        return f'Birthday edited'
 
     def remove_birthday(self):
         self.birthday = None
