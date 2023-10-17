@@ -11,25 +11,18 @@ def input_error(func):
     """
 
     def wrapper(*args, **kwargs):
-
-        # print(f'Wrapper in: func - {func.__name__}, args - {args}\n')
         
         try:
             return func(*args, **kwargs)
 
         except TypeError as e:
             return e
-        
-        # 'Give me name and phone please. Try again'
-
-            # if func.__name__ == 'phone':
-            #     return 'Enter user name. Try again'
-            # else:
-            #     return 'Give me name and phone please. Try again'
-            
+                    
         except KeyError as e:
-            print(e)
-            return 'You entered a wrong command. Try again!'
+            return e
+        
+        except ValueError as e:
+            return e
         
     return wrapper
 
