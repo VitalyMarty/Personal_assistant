@@ -45,21 +45,18 @@ class Record:
         self.address = None  
         self.email = None  
 
-        if phone is not None:
+        if phone:
             self.add_phone(phone)
 
-        if birthday is not None:
-            try:
-                self.birthday = Birthday(birthday)
-            except Exception as e:
-                print(f"Error setting birthday: {e}")
+        if birthday:
+            self.add_birthday(birthday)
         
     # Реалізація класу
     def add_address(self, address: str):
         self.address = Address(address)
 
     def edit_address(self, new_address: str):
-        if self.address is not None:
+        if self.address:
             self.address.value = new_address
         else:
             raise ValueError("No address to edit.")
@@ -71,7 +68,7 @@ class Record:
         self.email = Email(email)
 
     def edit_email(self, new_email: str):
-        if self.email is not None:
+        if self.email:
             self.email.value = new_email
         else:
             raise ValueError("No email to edit.")
