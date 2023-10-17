@@ -156,6 +156,22 @@ class Record:
         #     print(f"Error calculating days to birthday: {e}")
         #     return None
     
+    def search_contacts_by_name(self, name):
+        results = []
+        for record in self.data.values():
+            if record.name.value.lower() == name.lower():
+                results.append(record)
+        return results
+
+    def search_contacts_by_phone(self, phone):
+        results = []
+        for record in self.data.values():
+            for contact_phone in record.phones:
+                if contact_phone.value == phone:
+                    results.append(record)
+                    break
+        return results
+
     def __str__(self) -> str:
         days = str(self.days_to_birthday())
         return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
