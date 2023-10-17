@@ -35,7 +35,24 @@ class AddressBook(UserDict):
             if name:
                 dict_contacts[name] = days
                 
-        return dict_contacts              
+        return dict_contacts  
+
+    def search_contacts_by_name(self, name):
+        found_contacts_by_name = []
+        for record in self.data.values():
+            if record.name.value.lower() == name.lower():
+                found_contacts_by_name.append(record)
+        return found_contacts_by_name
+
+    def search_contacts_by_phone(self, phone):
+        found_contacts_by_phone = []
+        for record in self.data.values():
+            for contact_phone in record.phones:
+                if contact_phone.value == phone:
+                    found_contacts_by_phone.append(record)
+                    break
+        return found_contacts_by_phone
+            
 
 
 class Record:
@@ -122,22 +139,6 @@ class Record:
         if days <= target_days:
             return self.name.value, days
             
-    def search_contacts_by_name(self, name):
-        found_contacts_by_name = []
-        for record in self.data.values():
-            if record.name.value.lower() == name.lower():
-                found_contacts_by_name.append(record)
-        return found_contacts_by_name
-
-    def search_contacts_by_phone(self, phone):
-        found_contacts_by_phone = []
-        for record in self.data.values():
-            for contact_phone in record.phones:
-                if contact_phone.value == phone:
-                    found_contacts_by_phone.append(record)
-                    break
-        return found_contacts_by_phone
-
     def __str__(self) -> str:
         days = str(self.days_to_birthday())
         return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
