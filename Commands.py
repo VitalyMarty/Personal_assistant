@@ -1,20 +1,11 @@
-from AddressBook import contacts
+from AddressBook import Record, contacts
 from NoteBook import notes
 
-def add():
-    """
-    add phone <name> <phone>
-    add birthday <name> <date>
-    add address <name> <address>
-    add email <name> <email>
-    add note <note>
-    add tag <note> <tag>
-    
-    Функція повертає:
-    - Повідомлення, що <об'єкт> було добавлено в <місце>
-    - повідомлення про помилку
-    """
-    pass
+def add_contact(name):
+    """'add phone <name>' Добавити контакт"""
+    record = Record(name)
+    contacts.add_record(record)
+    return f'Added contact {name} to contacts'
 
 
 def change():
@@ -80,19 +71,6 @@ def get_help():
     return message
 
 
-# def get_next_birthday():
-#     """
-#     birthday <name (можна частково)>
-    
-#     Функція повертає:
-#     - Кількість днів до наступного дня народження, якщо в записі вказано день народження.
-#     - Повідомлення, що для такого запису еднь народження не задано
-#     - Повідомлення, що такого запису <name> не існує.
-    
-#     Якщо реалізовувати частковий пошук, то мабуть треба щоб виводило перелік записів, що відповідають критерію.
-#     """
-#     pass
-
 def find_birthdays_in_x_days(days):
     matching_contacts = ''
     dict_contacts = contacts.check_birthday(days)
@@ -146,7 +124,7 @@ command_dict ={
     'good bye': goodbye,
     'help': get_help,
     'congratulate': find_birthdays_in_x_days,
-    'add contact': contacts.add_record,
+    'add contact': add_contact,
     'add address': None,
     'add phone': None,
     'add email': None,
