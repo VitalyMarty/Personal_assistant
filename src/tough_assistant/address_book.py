@@ -88,9 +88,9 @@ class Record:
             raise ValueError(f'Phone number - {old_phone} is not exist in contact: {self.name}')    
 
     def find_phone(self, find_phone: str)-> Phone:
-        for indx, phone in enumerate(self.phones):
+        for index, phone in enumerate(self.phones):
             if phone.value == find_phone:
-                return self.phones[indx]
+                return self.phones[index]
             
     def find_address(self, find_address: str):
         if self.address == find_address:
@@ -101,9 +101,9 @@ class Record:
             return self.email
             
     def remove_phone(self, remove_phone)-> None:
-        for i, phone in enumerate(self.phones):
+        for index, phone in enumerate(self.phones):
             if phone.value == remove_phone:
-                del self.phones[i]
+                del self.phones[index]
 
     def add_birthday(self, birthday: str) -> None:
         try:
