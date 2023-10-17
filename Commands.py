@@ -1,19 +1,11 @@
+from AddressBook import Record, contacts
+from NoteBook import notes
 
-
-def add():
-    """
-    add phone <name> <phone>
-    add birthday <name> <date>
-    add address <name> <address>
-    add email <name> <email>
-    add note <note>
-    add tag <note> <tag>
-    
-    Функція повертає:
-    - Повідомлення, що <об'єкт> було добавлено в <місце>
-    - повідомлення про помилку
-    """
-    pass
+def add_contact(name):
+    """'add phone <name>' Добавити контакт"""
+    record = Record(name)
+    contacts.add_record(record)
+    return f'Added contact {name} to contacts'
 
 
 def change():
@@ -72,25 +64,14 @@ def get_help():
     """Show available commands"""
     message = 'I can do next commands:\n'
     for count, command in enumerate(command_dict, start=1):
-        message = '\n'.join([message, f'{count}. {command:<10}-{command_dict[command].__doc__}'])
+        if count <= 9:
+            count = f'0{count}'
+        message = '\n'.join([message, f'{count}. {command:<17}-{command_dict[command].__doc__}'])
 
     return message
 
 
-# def get_next_birthday():
-#     """
-#     birthday <name (можна частково)>
-    
-#     Функція повертає:
-#     - Кількість днів до наступного дня народження, якщо в записі вказано день народження.
-#     - Повідомлення, що для такого запису еднь народження не задано
-#     - Повідомлення, що такого запису <name> не існує.
-    
-#     Якщо реалізовувати частковий пошук, то мабуть треба щоб виводило перелік записів, що відповідають критерію.
-#     """
-#     pass
-
-def find_birthdays_in_x_days(contacts, days):
+def find_birthdays_in_x_days(days):
     matching_contacts = ''
     dict_contacts = contacts.check_birthday(days)
     for name in dict_contacts:
@@ -125,15 +106,9 @@ def sort_dir():
     pass
 
 
-def show_all():
-    """
-    Користувач вводить наступні команди через пробіл:
-    show all
-    
-    Функція повертає:   
-    - всі збереженні контакти з номерами телефонів у консоль.
-    """
-    pass
+def show_contacts():
+    """Вивести всі збереженні контакти"""
+    return contacts.show_contacts()
 
 
 command_dict ={
@@ -141,5 +116,27 @@ command_dict ={
     'exit': goodbye,
     'close': goodbye,
     'good bye': goodbye,
-    'help': get_help
+    'help': get_help,
+    'congratulate': find_birthdays_in_x_days,
+    'add contact': add_contact,
+    'add address': None,
+    'add phone': None,
+    'add email': None,
+    'add birthday': None,
+    'change address': None,
+    'change phone': None,
+    'change email': None,
+    'change birthday': None,
+    'change name': None,
+    'find contact': contacts.find,
+    'delete contact': contacts.delete,
+    'show contacts': None,
+    'add note': None,
+    'find note': None,
+    'change note': None,
+    'delete note': None,
+    'add tag': None,
+    'sort notes': None,
+    'sort dir': None,
+    'make file': None
 }
