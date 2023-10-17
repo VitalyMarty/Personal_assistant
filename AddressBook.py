@@ -40,7 +40,17 @@ class AddressBook(UserDict):
             if name:
                 dict_contacts[name] = days
                 
-        return dict_contacts              
+        return dict_contacts
+
+    def show_contacts(self):
+        message = ''
+        for count, contact in enumerate(self.data.values()):
+            if count < 9:
+                count = f'0{count}'
+            row = f'{count}.{contact.name.value}'
+            message = '\n'.join([message, row])
+        print(message)
+        return message              
 
 
 class Record:

@@ -32,6 +32,8 @@ def main():
         # При завершенні роботи зберігаємо contacts та notes
         storage_addressbook.save(contacts)
         storage_notebook.save(notes)
+        print(f'Contacts saved to file: {storage_addressbook.storage.filename}')
+        print(f'Notes saved to file: {storage_addressbook.storage.filename}')
 
 
 

@@ -11,7 +11,7 @@ def parse_input(user_input: str) -> str:
             data = user_input[len(new_input):].split()
             break
     if data:
-        return handler(new_input)(data)
+        return handler(new_input)(*data)
     return handler(new_input)()
 
 

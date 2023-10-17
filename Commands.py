@@ -106,15 +106,9 @@ def sort_dir():
     pass
 
 
-def show_all():
-    """
-    Користувач вводить наступні команди через пробіл:
-    show all
-    
-    Функція повертає:   
-    - всі збереженні контакти з номерами телефонів у консоль.
-    """
-    pass
+def show_contacts():
+    """Вивести всі збереженні контакти"""
+    return contacts.show_contacts()
 
 
 command_dict ={
