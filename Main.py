@@ -2,12 +2,14 @@ from AddressBook import AddressBook
 from Backup import Backup, PickleStorage
 from Commands import command_dict
 from NoteBook import Notebook
+from Decorators import input_error
+
 
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.shortcuts import input_dialog
 
-
+@input_error
 def parse_input(user_input: str) -> str:
     new_input = user_input
     data = ''
