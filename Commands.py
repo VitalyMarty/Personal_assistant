@@ -1,4 +1,5 @@
-
+from AddressBook import contacts
+from NoteBook import notes
 
 def add():
     """
@@ -90,7 +91,7 @@ def get_help():
 #     """
 #     pass
 
-def find_birthdays_in_x_days(contacts, days):
+def find_birthdays_in_x_days(days):
     matching_contacts = ''
     dict_contacts = contacts.check_birthday(days)
     for name in dict_contacts:
@@ -141,5 +142,27 @@ command_dict ={
     'exit': goodbye,
     'close': goodbye,
     'good bye': goodbye,
-    'help': get_help
+    'help': get_help,
+    'congratulate': find_birthdays_in_x_days,
+    'add contact': contacts.add_record,
+    'add address': None,
+    'add phone': None,
+    'add email': None,
+    'add birthday': None,
+    'change address': None,
+    'change phone': None,
+    'change email': None,
+    'change birthday': None,
+    'change name': None,
+    'find contact': contacts.find,
+    'delete contact': contacts.delete,
+    'show contacts': None,
+    'add note': None,
+    'find note': None,
+    'change note': None,
+    'delete note': None,
+    'add tag': None,
+    'sort notes': None,
+    'sort dir': None,
+    'make file': None
 }
