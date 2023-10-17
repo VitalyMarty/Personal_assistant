@@ -62,6 +62,14 @@ class Birthday(Field):
         if birthday > today:
             return f"Birthday '{birthday}' must be less than current year and date."
         return birthday
+    
+    def get_next_birthday(self):
+        today = datetime.now().date()
+        next_birthday = self._value.replace(year=today.year)
+        if next_birthday < today:
+            next_birthday - self._value.replace(year = today.year+1)
+        return abs(next_birthday - today)    
+            
 
 
 class Address(Field):
@@ -103,3 +111,5 @@ if __name__ == '__main__':
 
     field_email_not_valid = Email('test:!@email@gmail.com')  
     print(field_email_not_valid)                          # Email 'test:!@email@gmail.com' is not valid.
+    
+    

@@ -32,6 +32,16 @@ class AddressBook(UserDict):
             records_chunk = [self.data[record_name] for record_name in record_names[current_index:end_index]]
             yield records_chunk
             current_index = end_index
+            
+    def check_birthday(self, target_days):
+        dict_contacts = dict()
+        
+        for contact in self.data:
+            name, days = contact.days_to_birthday(target_days)  
+            if name:
+                dict_contacts[name] = days
+                
+        return dict_contacts              
 
 
 class Record:
@@ -126,20 +136,25 @@ class Record:
     def remove_birthday(self):
         self.birthday = None
 
-    def days_to_birthday(self):
-        if not self.birthday:
-            return None
-        try:
-            today = date.today()
-            actual_birthday = self.birthday.value.replace(year=today.year)
-            if actual_birthday < today:
-                actual_birthday = self.birthday.value.replace(year=today.year + 1)
-            time_to_birthday = abs(actual_birthday - today)
+    def days_to_birthday(self, target_days):
+        days = self.birthday.get_days_to_next_birthday()
+        if days <= target_days:
+            return self.name.value, days
+        
+        
+        # if not self.birthday:
+        #     return None
+        # try:
+        #     today = date.today()
+        #     actual_birthday = self.birthday.value.replace(year=today.year)
+        #     if actual_birthday < today:
+        #         actual_birthday = self.birthday.value.replace(year=today.year + 1)
+        #     time_to_birthday = abs(actual_birthday - today)
 
-            return time_to_birthday.days
-        except Exception as e:
-            print(f"Error calculating days to birthday: {e}")
-            return None
+        #     return time_to_birthday.days
+        # except Exception as e:
+        #     print(f"Error calculating days to birthday: {e}")
+        #     return None
     
     def __str__(self) -> str:
         days = str(self.days_to_birthday())
@@ -149,5 +164,7 @@ class Record:
         self.phones_repr = ', '.join([phone.value for phone in self.phones])
         return f'Record({self.name.value}, {self.phones_repr}, {self.birthday.value})'
     
+    
+        
 
 
