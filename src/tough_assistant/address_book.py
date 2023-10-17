@@ -1,5 +1,5 @@
 from collections import UserDict
-from Fields import Address, Birthday, Email, Name, Phone  
+from fields_classes import Address, Birthday, Email, Name, Phone  
 from datetime import date
 import pickle
 
