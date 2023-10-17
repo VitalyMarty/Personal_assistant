@@ -28,7 +28,7 @@ class AddressBook(UserDict):
             current_index = end_index
             
     def check_birthday(self, target_days):
-        dict_contacts = dict()
+        dict_contacts = {}
         
         for contact in self.data:
             name, days = contact.days_to_birthday(target_days)  
