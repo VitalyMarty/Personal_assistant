@@ -121,22 +121,7 @@ class Record:
         days = self.birthday.get_days_to_next_birthday()
         if days <= target_days:
             return self.name.value, days
-        
-        
-        # if not self.birthday:
-        #     return None
-        # try:
-        #     today = date.today()
-        #     actual_birthday = self.birthday.value.replace(year=today.year)
-        #     if actual_birthday < today:
-        #         actual_birthday = self.birthday.value.replace(year=today.year + 1)
-        #     time_to_birthday = abs(actual_birthday - today)
-
-        #     return time_to_birthday.days
-        # except Exception as e:
-        #     print(f"Error calculating days to birthday: {e}")
-        #     return None
-    
+            
     def search_contacts_by_name(self, name):
         results = []
         for record in self.data.values():
