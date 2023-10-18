@@ -96,6 +96,8 @@ def get_help():
 #     pass
 
 def find_birthdays_in_x_days(days):
+    """ Display a list of contacts whose birthday is a specified number of days from the current date """
+    
     matching_contacts = ''
     dict_contacts = contacts.check_birthday(days)
     for name in dict_contacts:
