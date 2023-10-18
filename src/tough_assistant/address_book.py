@@ -209,7 +209,9 @@ class AddressBook(UserDict):
 
     def show_contacts(self):
         """Show all contacts"""
-        message = 'Book has next records:\n'
+        if not self.data:
+            return 'Book no contacts yet'
+        message = 'Book has next contacts:\n'
         for count, key_record in enumerate(self.data, start=1):
             message = '\n'.join([message, f'{count}.\n{self.data[key_record]}'])
 
