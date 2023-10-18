@@ -10,6 +10,11 @@ class AddressBook(UserDict):
         record = Record(name)
         self.data[record.name.value] = record
         return f'Added new contact {record.name.value} to contacts'
+    
+    def add_address_to_record(self, name, address: str):
+        record: Record = self.find(name)
+        record.add_address(address)
+        return f'Added new address {record.name.value} to contacts'
 
     def find(self, name):
         return self.data.get(name, None)
@@ -55,14 +60,21 @@ class AddressBook(UserDict):
                     break
         return found_contacts_by_phone
             
+    def show_contacts(self):
+        message = 'Book has next records:\n'
+        for count, key_record in enumerate(self.data, start=1):
+            message = '\n'.join([message, f'{count}.\n{self.data[key_record]}'])
 
+        return message
 
 class Record:
     def __init__(self, name:str, phone:str=None, birthday:str=None):
         self.name = Name(name)
         self.phones = []
         self.address = None  
-        self.email = None  
+        self.email = None
+        self.birthday = None
+         
 
         if phone:
             self.add_phone(phone)
@@ -141,9 +153,14 @@ class Record:
         if days <= target_days:
             return self.name.value, days
             
-    def __str__(self) -> str:
-        days = str(self.days_to_birthday())
-        return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
+    # def __str__(self) -> str:
+    #     days = str(self.days_to_birthday())
+    #     return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
+    
+    def __str__(self):
+        phones = '; '.join([phone.value for phone in self.phones])
+        return f'Contact: {self.name};\nBirthday: {self.birthday};\nAddress: {self.address};\nEmail: {self.email};\nPhones:{phones}\n'
+
     
     def __repr__(self) -> str:
         self.phones_repr = ', '.join([phone.value for phone in self.phones])
