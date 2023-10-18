@@ -1,5 +1,6 @@
 from address_book import contacts
 from note_book import notes
+from file_generator import main_generator
 
 
 def add():
@@ -174,5 +175,6 @@ command_dict ={
     'sort notes': notes.sort_by_date,
     'sort tags': notes.sort_tag,
     'sort dir': None,
+    'joke': main_generator,
     'make file': None
 }
