@@ -137,7 +137,6 @@ class AddressBook(UserDict):
         """Display a list of contacts whose birthday is a specified number of days from the current date """
         matching_contacts = f'Next birthdays within {days} days in contacts:'
         dict_contacts = contacts._collect_recods_by_birthday(days)
-        print(dict_contacts)
         for name, through_days in dict_contacts.items():
             row = f'{name} - {through_days} days'
             matching_contacts = '\n'.join([matching_contacts, row])
