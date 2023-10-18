@@ -1,74 +1,7 @@
 from address_book import contacts
 from note_book import notes
 from file_generator import main_generator
-
-
-def add():
-    """
-    add phone <name> <phone>
-    add birthday <name> <date>
-    add address <name> <address>
-    add email <name> <email>
-    add note <note>
-    add tag <note> <tag>
-    
-    Функція повертає:
-    - Повідомлення, що <об'єкт> було добавлено в <місце>
-    - повідомлення про помилку
-    """
-    pass
-
-
-def change():
-    """
-    change phone <name> <phone>
-    change birthday <name> <date>
-    change address <name> <address>
-    change email <name> <email>
-    change note <note>
-    change tag <note> <tag>
-
-    Функція повертає:
-    - Повідомлення, що <об'єкт> було змінено з <old_value> на <new_value>
-    - повідомлення про помилку
-"""
-    pass
-
-
-def delete():
-    """
-    delete phone <name> <phone>
-    delete birthday <name> <date>
-    delete address <name> <address>
-    delete email <name> <email>
-    delete record <name>
-    delete note <note>
-    delete tag <note> <tag>
-    
-    Функція повертає:
-    -Повідомлення, що <об'єкт> було з <місце>
-    -повідомлення про помилку
-    """
-    pass
-
-
-def find():
-    """
-    find record <name (можна частково)>
-    find record <phone (можна частково)>
-    find record <birthday (можна частково)>
-    find record <address (можна частково)>
-    find record <email (можна частково)>
-    find note <що знайти>
-    find tag <tag (можна частково)>
-    
-    Функція повертає:
-    - Записи, що відповідають критеріям пошуку.
-    - Нотатки, що відповідають критеріям пошуку.
-    - Повідомлення, що по таким критеріям нічого не знайдено.
-    - повідомлення про помилку
-    """
-    pass
+from file_sorter import sort_and_rename_files
 
 
 def get_help():
@@ -80,30 +13,6 @@ def get_help():
         message = '\n'.join([message, f'{count}. {command:<20}-{command_dict[command].__doc__}'])
 
     return message
-
-
-# def get_next_birthday():
-#     """
-#     birthday <name (можна частково)>
-    
-#     Функція повертає:
-#     - Кількість днів до наступного дня народження, якщо в записі вказано день народження.
-#     - Повідомлення, що для такого запису еднь народження не задано
-#     - Повідомлення, що такого запису <name> не існує.
-    
-#     Якщо реалізовувати частковий пошук, то мабуть треба щоб виводило перелік записів, що відповідають критерію.
-#     """
-#     pass
-
-def find_birthdays_in_x_days(days):
-    matching_contacts = ''
-    dict_contacts = contacts.check_birthday(days)
-    for name in dict_contacts:
-        row = f'{name} - {dict_contacts[name]} days'
-        '\n'.join([matching_contacts, row])
-        
-    return matching_contacts
-
     
 
 def goodbye():
@@ -116,31 +25,6 @@ def hello():
     return f'How can I help you?'
 
 
-def sort_dir():
-    """
-    sort <path dir>
-
-    Функція виконує:
-    - Сортує <path dir>
-
-    Функція повертає:
-    - Повідомлення про те що <path dir> відсортовано
-    - Повідомлення, що такої папки не існує
-    """
-    pass
-
-
-def show_all():
-    """
-    Користувач вводить наступні команди через пробіл:
-    show all
-    
-    Функція повертає:   
-    - всі збереженні контакти з номерами телефонів у консоль.
-    """
-    pass
-
-
 command_dict ={
     'hello': hello,
     'exit': goodbye,
@@ -148,7 +32,7 @@ command_dict ={
     'good bye': goodbye,
     'help': get_help,
     'find in contacts': contacts.find_in_records,
-    'congratulate': find_birthdays_in_x_days,
+    'congratulate': contacts.find_birthdays_in_x_days,
     'add contact': contacts.add_record,
     'add address': contacts.add_address_to_record,
     'add phone': contacts.add_phone_to_record,
@@ -166,15 +50,16 @@ command_dict ={
     'delete email': contacts.delete_email_from_record,
     'delete birthday': contacts.delete_birthday_from_record,
     'show contacts': contacts.show_contacts,
+    'show notes': notes.show_all,
     'add note': notes.add_note,
     'find note': notes.find_note,
     'find note by tag': notes.find_by_tag,
     'edit note': notes.edit_note,
     'delete note': notes.remove_note,
-    'add tag': None,
+    'add tag': notes.add_tag,
     'sort notes': notes.sort_by_date,
     'sort tags': notes.sort_tag,
-    'sort dir': None,
+    'sort dir': sort_and_rename_files,
     'joke': main_generator,
     'make file': None
 }

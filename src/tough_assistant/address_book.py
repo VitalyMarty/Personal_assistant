@@ -112,15 +112,25 @@ class AddressBook(UserDict):
             yield records_chunk
             current_index = end_index
             
-    def check_birthday(self, target_days):
+    def _collect_recods_by_birthday(self, target_days):
         dict_contacts = {}
-        
         for record in self.data.values():
-            name, days = record.days_to_birthday(target_days)  
+            name, days = record.check_birthday_by_date(target_days)
             if name:
                 dict_contacts[name] = days
-                
         return dict_contacts 
+    
+    def find_birthdays_in_x_days(self, days):
+        """ Display a list of contacts whose birthday is a specified number of days from the current date """
+        matching_contacts = f'Next birthdays within {days} days in contacts:'
+        dict_contacts = contacts._collect_recods_by_birthday(days)
+        print(dict_contacts)
+        for name, through_days in dict_contacts.items():
+            row = f'{name} - {through_days} days'
+            matching_contacts = '\n'.join([matching_contacts, row])
+            
+        return matching_contacts
+
 
     def _search_contacts_by_name(self, name):
         found_contacts_by_name = []
@@ -182,7 +192,6 @@ class AddressBook(UserDict):
 
         return str_result
 
-            
     def show_contacts(self):
         message = 'Book has next records:\n'
         for count, key_record in enumerate(self.data, start=1):
@@ -197,6 +206,7 @@ class Record:
         self._address = None  
         self._email = None
         self._birthday = None
+
         
     # Реалізація класу
     @property
@@ -251,15 +261,7 @@ class Record:
             if phone == find_phone:
                 return self.phones[index]
         return ValueError(f'Phone number - {find_phone.value} is not exist in contact: {self.name}') 
-            
-    # def find_address(self, find_address: str):
-    #     if self.address == find_address:
-    #         return self.address
-
-    # def find_email(self, find_email: str):
-    #     if self.email == find_email:
-    #         return self.email
-            
+             
     def remove_phone(self, remove_phone)-> None:
         for index, phone in enumerate(self.phones):
             if phone == remove_phone:
@@ -267,36 +269,21 @@ class Record:
                 return f'Phone {phone.value} was deleted from contact {self.name}'
         return ValueError(f'Phone number - {remove_phone.value} is not exist in contact: {self.name}') 
 
-
-    def add_birthday(self, birthday: str) -> None:
-        self.birthday = Birthday(birthday)
-        return f'Birthday added'
-
-
-    def edit_birthday(self, new_birthday: str):
-        self.birthday.value = new_birthday
-        return f'Birthday edited'
-
-    def remove_birthday(self):
-        self.birthday = None
-
-    def days_to_birthday(self, target_days):
-        days = self.birthday
-        if days <= target_days:
-            return self.name.value, days
-            
-    # def __str__(self) -> str:
-    #     days = str(self.days_to_birthday())
-    #     return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
-    
+    def check_birthday_by_date(self, target_days):
+        if self._birthday is None:
+            return None
+        days = self._birthday.get_next_birthday()
+        if days <= int(target_days):
+            return self.name, days
+        
     def __str__(self):
         phones = '; '.join([phone.value for phone in self.phones])
         return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones:{phones}\n'
 
     
-    # def __repr__(self) -> str:
-    #     self._phones_repr = ', '.join([phone.value for phone in self.phones])
-    #     return f'Record({self._name.value}, {self._phones_repr}, {self._birthday.value})'
+    def __repr__(self) -> str:
+        phones_repr = ', '.join([phone.value for phone in self.phones])
+        return f'Record({self.name}, {self.birthday}, {self.address}, {self.email}, {phones_repr})'
     
     
 # Створюємо сховище, де зберігається файл з контактами та нотатками
