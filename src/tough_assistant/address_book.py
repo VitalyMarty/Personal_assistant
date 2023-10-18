@@ -8,37 +8,26 @@ class AddressBook(UserDict):
 
     def add_record(self, name):
         record = Record(name)
-        self.data[record.name.value] = record
-        return f'Added new contact {record.name.value} to contacts'
+        self.data[record.name] = record
+        return f'Added new contact {record.name} to contacts'
     
     def add_address_to_record(self, name, address: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
-
-        record.add_address(address)
+        record.address = address
         return f'Added new address {record.address.value} to contact {record.name.value}'
     
     def add_phone_to_record(self, name, phone: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
-
         record.add_phone(phone)
         return f'Added new phone {record.phones[-1]} to contact {record.name.value}'
     
     def add_email_to_record(self, name, email: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
-
         record.add_email(email)
         return f'Added new email {record.email.value} to contact {record.name.value}'
     
     def add_birthday_to_record(self, name, birthday: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
         record.add_birthday(birthday)
         return f'Added new birthday {record.birthday.value} to contact {record.name.value}'
     
@@ -52,6 +41,7 @@ class AddressBook(UserDict):
         record: Record = self.find(name)
         old_phone = Phone(old_phone)
         new_phone = Phone(new_phone)
+
         record.edit_phone(old_phone, new_phone)
         return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name.value}'"
     
@@ -109,28 +99,64 @@ class AddressBook(UserDict):
         return message
 
 class Record:
-    def __init__(self, name:str, phone:str=None, birthday:str=None):
-        self.name = Name(name)
-        self.phones = []
-        self.address = None  
-        self.email = None
-        self.birthday = None
+    def __init__(self, name:str):
+        self._name = Name(name)
+        self._phones = []
+        self._address = None  
+        self._email = None
+        self._birthday = None
          
 
-        if phone:
-            self.add_phone(phone)
+        # if phone:
+        #     self.add_phone(phone)
 
-        if birthday:
-            self.add_birthday(birthday)
+        # if birthday:
+        #     self.add_birthday(birthday)
         
     # Реалізація класу
     @property
+    def name(self):
+        return self._name.value
+    
+    @name.setter
+    def name(self, name: str):
+        self._name = Name(name)
+
+    @property
     def address(self):
-        return self.address.value
+        if self._address is None:
+            return ''
+        return self._address.value
     
     @address.setter
     def address(self, address: str):
-        self.address = Address(address)
+        self._address = Address(address)
+
+    @property
+    def email(self):
+        if self._email is None:
+            return ''
+        return self._email.value
+    
+    @email.setter
+    def email(self, email: str):
+        self._email = Email(email)
+
+    @property
+    def birthday(self):
+        if self._birthday is None:
+            return ''
+        return self._birthday.value
+    
+    @birthday.setter
+    def birthday(self, birthday: str):
+        self._birthday = Birthday(birthday)
+
+    #TODO Add getter and setter for phones
+
+    
+    
+
 
     
 
@@ -210,13 +236,13 @@ class Record:
     #     return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
     
     def __str__(self):
-        phones = '; '.join([phone.value for phone in self.phones])
-        return f'Contact: {self.name};\nBirthday: {self.birthday};\nAddress: {self.address};\nEmail: {self.email};\nPhones:{phones}\n'
+        phones = '; '.join([phone.value for phone in self._phones])
+        return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones:{self._phones}\n'
 
     
-    def __repr__(self) -> str:
-        self.phones_repr = ', '.join([phone.value for phone in self.phones])
-        return f'Record({self.name.value}, {self.phones_repr}, {self.birthday.value})'
+    # def __repr__(self) -> str:
+    #     self._phones_repr = ', '.join([phone.value for phone in self.phones])
+    #     return f'Record({self._name.value}, {self._phones_repr}, {self._birthday.value})'
     
     
 # Створюємо сховище, де зберігається файл з контактами та нотатками
