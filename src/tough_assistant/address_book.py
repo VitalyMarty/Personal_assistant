@@ -137,10 +137,35 @@ class AddressBook(UserDict):
                     found_contacts_by_phone.append(record)
         return found_contacts_by_phone
     
+    def _search_contacts_by_email(self, email):
+        found_contacts_by_email = []
+        for record in self.data.values():
+            if email.lower() in record.email.lower():
+                found_contacts_by_email.append(record)
+        return found_contacts_by_email
+    
+    def _search_contacts_by_address(self, address):
+        found_contacts_by_address = []
+        for record in self.data.values():
+            if address.lower() in record.address.lower():
+                found_contacts_by_address.append(record)
+        return found_contacts_by_address
+
+    def _search_contacts_by_birthday(self, birthday):
+        found_contacts_by_birthday = []
+        for record in self.data.values():
+            if birthday in str(record.birthday):
+                found_contacts_by_birthday.append(record)
+        return found_contacts_by_birthday
+
+    
     def find_in_records(self, search_data: str):
         found_contacts = []
         found_contacts.extend(self._search_contacts_by_name(search_data))
         found_contacts.extend(self._search_contacts_by_phone(search_data))
+        found_contacts.extend(self._search_contacts_by_email(search_data))
+        found_contacts.extend(self._search_contacts_by_address(search_data))
+        found_contacts.extend(self._search_contacts_by_birthday(search_data))
 
         if not found_contacts:
             return f'Not find contacts with search parameters "{search_data}"'
