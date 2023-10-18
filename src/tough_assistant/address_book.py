@@ -14,29 +14,31 @@ class AddressBook(UserDict):
     def add_address_to_record(self, name, address: str) -> str:
         record: Record = self.find(name)
         record.address = address
-        return f'Added new address {record.address.value} to contact {record.name.value}'
+        return f'Added new address {record.address} to contact {record.name}'
     
+    #TODO change code for phone
     def add_phone_to_record(self, name, phone: str) -> str:
         record: Record = self.find(name)
         record.add_phone(phone)
-        return f'Added new phone {record.phones[-1]} to contact {record.name.value}'
+        return f'Added new phone {record.phones[-1]} to contact {record.name}'
     
     def add_email_to_record(self, name, email: str) -> str:
         record: Record = self.find(name)
-        record.add_email(email)
-        return f'Added new email {record.email.value} to contact {record.name.value}'
+        record.email = email
+        return f'Added new email {record.email} to contact {record.name}'
     
     def add_birthday_to_record(self, name, birthday: str) -> str:
         record: Record = self.find(name)
-        record.add_birthday(birthday)
-        return f'Added new birthday {record.birthday.value} to contact {record.name.value}'
+        record.birthday = birthday
+        return f'Added new birthday {record.birthday} to contact {record.name}'
     
     def edit_address_in_record(self, name: str, new_address: str) -> str:
         record: Record = self.find(name)
-        old_address = record.address.value
-        record.edit_address(new_address)
-        return f"The old address '{old_address}' was changed to a new '{record.address.value}' in the contact '{record.name.value}'"
+        old_address = record.address
+        record.address = new_address
+        return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'"
 
+    #TODO change code for phone
     def edit_phone_in_record(self, name: str, old_phone, new_phone: str) -> str:
         record: Record = self.find(name)
         old_phone = Phone(old_phone)
@@ -47,8 +49,11 @@ class AddressBook(UserDict):
     
 
 
-    def find(self, name):
-        return self.data.get(name, None)
+    def find(self, name: str):
+        record = self.data.get(name, None)
+        if record is None:
+            raise ValueError(f"There is no contact with name {name} in the book")
+        return record
 
     def delete(self, name):
         if name in self.data:
