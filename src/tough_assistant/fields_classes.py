@@ -50,7 +50,7 @@ class Phone(Field):
         if len(value) < 10 or len(value) > 12:
                 raise ValueError(f"Phone '{value}' must contains 10 symbols.")
         if not value.isnumeric():
-                raise ValueError(f'Phone '{value}' is wrong.')
+                raise ValueError(f"Phone '{value}' is wrong.")
         return value
     
     def __eq__(self, phone):
@@ -66,7 +66,7 @@ class Birthday(Field):
     def validate(self, birthday: str) -> str:
         today = datetime.now().date()
         if birthday > today:
-            return f"Birthday '{birthday}' must be less than current year and date."
+            raise ValueError(f"Birthday '{birthday}' must be less than current year and date.")
         return birthday
     
     def get_next_birthday(self):
@@ -88,7 +88,7 @@ class Email(Field):
         pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]*\.*[com|org|edu|ua|net]{3}$)"
         is_valid = re.search(pattern, email)
         if not is_valid:
-            return f"Email '{email}' is not valid."
+            return ValueError(f"Email '{email}' is not valid.")
         return email
     
 
