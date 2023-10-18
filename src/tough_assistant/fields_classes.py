@@ -48,9 +48,9 @@ class Phone(Field):
     
     def validate(self, value: str) -> str:
         if len(value) < 10 or len(value) > 12:
-                return f"Phone '{value}' must contains 10 symbols."
+                raise ValueError(f"Phone '{value}' must contains 10 symbols.")
         if not value.isnumeric():
-                return 'Wrong phones.'
+                raise ValueError(f'Phone '{value}' is wrong.')
         return value
     
     def __eq__(self, phone):
