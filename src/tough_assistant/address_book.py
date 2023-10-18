@@ -48,7 +48,7 @@ class AddressBook(UserDict):
     def edit_email_in_record(self, name: str, new_email: str) -> str:
         record: Record = self.find_record(name)
         old_email = record.email
-        record.address = new_email
+        record.email = new_email
         return f"The old email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}'"
     
     def edit_birthday_in_record(self, name: str, new_birthday: str) -> str:
