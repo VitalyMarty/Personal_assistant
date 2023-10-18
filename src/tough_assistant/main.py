@@ -37,6 +37,7 @@ def handler(command):
     return command_dict.get(command, break_func)
 
 
+
 def main():
 
     # Створюємо сховище, де зберігається файл з контактами та нотатками
