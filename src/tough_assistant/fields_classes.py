@@ -24,6 +24,9 @@ class Field:
     def __str__(self):
         return f'{self._value}'
 
+    def __repr__(self):
+        return f'Phone({self._value})'
+
 
 class Name(Field):
 

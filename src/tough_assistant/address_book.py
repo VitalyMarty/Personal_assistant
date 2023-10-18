@@ -8,52 +8,56 @@ class AddressBook(UserDict):
 
     def add_record(self, name):
         record = Record(name)
-        self.data[record.name.value] = record
-        return f'Added new contact {record.name.value} to contacts'
+        self.data[record.name] = record
+        return f'Added new contact {record.name} to contacts'
     
     def add_address_to_record(self, name, address: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
-
-        record.add_address(address)
-        return f'Added new address {record.address.value} to contact {record.name.value}'
+        record.address = address
+        return f'Added new address {record.address} to contact {record.name}'
     
+    #TODO change code for phone
     def add_phone_to_record(self, name, phone: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
-
         record.add_phone(phone)
-        return f'Added new phone {record.phones[-1]} to contact {record.name.value}'
+        return f'Added new phone {record.phones[-1]} to contact {record.name}'
     
     def add_email_to_record(self, name, email: str) -> str:
         record: Record = self.find(name)
-        if record is None:
-            return f"There is no contact with name {name} in the book"
-
-        record.add_email(email)
-        return f'Added new email {record.email.value} to contact {record.name.value}'
+        record.email = email
+        return f'Added new email {record.email} to contact {record.name}'
     
     def add_birthday_to_record(self, name, birthday: str) -> str:
         record: Record = self.find(name)
+        record.birthday = birthday
+        return f'Added new birthday {record.birthday} to contact {record.name}'
+    
+    def edit_address_in_record(self, name: str, new_address: str) -> str:
+        record: Record = self.find(name)
+        old_address = record.address
+        record.address = new_address
+        return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'"
+
+    #TODO change code for phone
+    def edit_phone_in_record(self, name: str, old_phone, new_phone: str) -> str:
+        record: Record = self.find(name)
+        old_phone = Phone(old_phone)
+        new_phone = Phone(new_phone)
+
+        record.edit_phone(old_phone, new_phone)
+        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name.value}'"
+
+    def find(self, name: str):
+        record = self.data.get(name, None)
         if record is None:
-            return f"There is no contact with name {name} in the book"
-        record.add_birthday(birthday)
-        return f'Added new birthday {record.birthday.value} to contact {record.name.value}'
+            raise ValueError(f"There is no contact with name {name} in the book")
+        return record
+
+    def delete(self, name: str):
+        record = self.find(name)
+        del self.data[record.name]
+        return f'Contact {record.name} was deleted from contacts'
     
-    def change_record_address(self, name: str, new_address: str) -> str:
-        pass
-    
-
-
-    def find(self, name):
-        return self.data.get(name, None)
-
-    def delete(self, name):
-        if name in self.data:
-            del self.data[name]
-
     def iterator(self, chunk_size=10):
         record_names = list(self.data.keys())
         num_records = len(record_names)
@@ -99,21 +103,67 @@ class AddressBook(UserDict):
         return message
 
 class Record:
-    def __init__(self, name:str, phone:str=None, birthday:str=None):
-        self.name = Name(name)
-        self.phones = []
-        self.address = None  
-        self.email = None
-        self.birthday = None
+    def __init__(self, name:str):
+        self._name = Name(name)
+        self._phones = []
+        self._address = None  
+        self._email = None
+        self._birthday = None
          
 
-        if phone:
-            self.add_phone(phone)
+        # if phone:
+        #     self.add_phone(phone)
 
-        if birthday:
-            self.add_birthday(birthday)
+        # if birthday:
+        #     self.add_birthday(birthday)
         
     # Реалізація класу
+    @property
+    def name(self):
+        return self._name.value
+    
+    @name.setter
+    def name(self, name: str):
+        self._name = Name(name)
+
+    @property
+    def address(self):
+        if self._address is None:
+            return ''
+        return self._address.value
+    
+    @address.setter
+    def address(self, address: str):
+        self._address = Address(address)
+
+    @property
+    def email(self):
+        if self._email is None:
+            return ''
+        return self._email.value
+    
+    @email.setter
+    def email(self, email: str):
+        self._email = Email(email)
+
+    @property
+    def birthday(self):
+        if self._birthday is None:
+            return ''
+        return self._birthday.value
+    
+    @birthday.setter
+    def birthday(self, birthday: str):
+        self._birthday = Birthday(birthday)
+
+    #TODO Add getter and setter for phones
+
+    
+    
+
+
+    
+
     def add_address(self, address: str):
         self.address = Address(address)
 
@@ -141,13 +191,14 @@ class Record:
     def add_phone(self, number: str)-> None:
         self.phones.append(Phone(number))
 
-    def edit_phone(self, old_phone: str, new_phone: str)-> None:
-        for phone in self.phones:
-            if phone.value == old_phone:
-                phone.value = new_phone
+    def edit_phone(self, old_phone: Phone, new_phone: Phone)-> None:
+        for i, phone in enumerate(self.phones):
+            if phone.value == old_phone.value:
+                edit_phone_i = i
                 break
         else:
-            raise ValueError(f'Phone number - {old_phone} is not exist in contact: {self.name}')    
+            raise ValueError(f'Phone number - {old_phone.value} is not exist in contact: {self.name}') 
+        self.phones[edit_phone_i] = new_phone
 
     def find_phone(self, find_phone: str)-> Phone:
         for index, phone in enumerate(self.phones):
@@ -189,13 +240,13 @@ class Record:
     #     return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
     
     def __str__(self):
-        phones = '; '.join([phone.value for phone in self.phones])
-        return f'Contact: {self.name};\nBirthday: {self.birthday};\nAddress: {self.address};\nEmail: {self.email};\nPhones:{phones}\n'
+        phones = '; '.join([phone.value for phone in self._phones])
+        return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones:{self._phones}\n'
 
     
-    def __repr__(self) -> str:
-        self.phones_repr = ', '.join([phone.value for phone in self.phones])
-        return f'Record({self.name.value}, {self.phones_repr}, {self.birthday.value})'
+    # def __repr__(self) -> str:
+    #     self._phones_repr = ', '.join([phone.value for phone in self.phones])
+    #     return f'Record({self._name.value}, {self._phones_repr}, {self._birthday.value})'
     
     
 # Створюємо сховище, де зберігається файл з контактами та нотатками
