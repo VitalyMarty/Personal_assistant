@@ -135,8 +135,10 @@ class AddressBook(UserDict):
     
     def find_birthdays_in_x_days(self, days):
         """Display a list of contacts whose birthday is a specified number of days from the current date """
-        matching_contacts = f'Next birthdays within {days} days in contacts:'
         dict_contacts = contacts._collect_recods_by_birthday(days)
+        if not dict_contacts:
+            return f'Contacts has not birthdays within {days} days in contacts:'
+        matching_contacts = f'Contacts has next birthdays within {days} days in contacts:'
         for name, through_days in dict_contacts.items():
             row = f'{name} - {through_days} days'
             matching_contacts = '\n'.join([matching_contacts, row])
@@ -285,10 +287,12 @@ class Record:
 
     def check_birthday_by_date(self, target_days):
         if self._birthday is None:
-            return None
+            return None, None
         days = self._birthday.get_next_birthday()
         if days <= int(target_days):
             return self.name, days
+        else:
+            return None, None
         
     def __str__(self):
         phones = '; '.join([phone.value for phone in self.phones])
