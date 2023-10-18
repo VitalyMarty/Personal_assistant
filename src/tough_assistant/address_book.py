@@ -125,7 +125,7 @@ class AddressBook(UserDict):
             yield records_chunk
             current_index = end_index
             
-    def _collect_recods_by_birthday(self, target_days):
+    def _collect_recods_by_birthday(self, target_days: str):
         dict_contacts = {}
         for record in self.data.values():
             name, days = record.check_birthday_by_date(target_days)
@@ -133,7 +133,7 @@ class AddressBook(UserDict):
                 dict_contacts[name] = days
         return dict_contacts 
     
-    def find_birthdays_in_x_days(self, days):
+    def find_birthdays_in_x_days(self, days: str):
         """Display a list of contacts whose birthday is a specified number of days from the current date """
         matching_contacts = f'Next birthdays within {days} days in contacts:'
         dict_contacts = contacts._collect_recods_by_birthday(days)
@@ -145,14 +145,14 @@ class AddressBook(UserDict):
         return matching_contacts
 
 
-    def _search_contacts_by_name(self, name):
+    def _search_contacts_by_name(self, name: str):
         found_contacts_by_name = []
         for record in self.data.values():
             if name.lower() in record.name.lower():
                 found_contacts_by_name.append(record)
         return found_contacts_by_name
 
-    def _search_contacts_by_phone(self, phone):
+    def _search_contacts_by_phone(self, phone: str):
         found_contacts_by_phone = []
         for record in self.data.values():
             for contact_phone in record.phones:
@@ -160,21 +160,21 @@ class AddressBook(UserDict):
                     found_contacts_by_phone.append(record)
         return found_contacts_by_phone
     
-    def _search_contacts_by_email(self, email):
+    def _search_contacts_by_email(self, email: str):
         found_contacts_by_email = []
         for record in self.data.values():
             if email.lower() in record.email.lower():
                 found_contacts_by_email.append(record)
         return found_contacts_by_email
     
-    def _search_contacts_by_address(self, address):
+    def _search_contacts_by_address(self, address: str):
         found_contacts_by_address = []
         for record in self.data.values():
             if address.lower() in record.address.lower():
                 found_contacts_by_address.append(record)
         return found_contacts_by_address
 
-    def _search_contacts_by_birthday(self, birthday):
+    def _search_contacts_by_birthday(self, birthday: str):
         found_contacts_by_birthday = []
         for record in self.data.values():
             if birthday in str(record.birthday):
@@ -199,7 +199,7 @@ class AddressBook(UserDict):
                 # Якщо менше ind < 10, то буде 01, 02, ..., 09, якщо більше, то 10, 11, ...
                 ind = f'0{ind}' if ind <= 9 else str(ind)
                 print(str_result)
-                row = f'\n{ind}.\n {str(record)}'
+                row = f'\n{ind}.\n{str(record)}'
                 print(row)
                 str_result = ''.join([str_result, row])  
             print(str_result)
@@ -216,11 +216,12 @@ class AddressBook(UserDict):
 
 class Record:
     def __init__(self, name:str):
-        self._name = Name(name)
+        self._name = None
         self.phones = []
         self._address = None  
         self._email = None
         self._birthday = None
+        self.name = name
 
         
     # Реалізація класу
@@ -293,7 +294,7 @@ class Record:
         
     def __str__(self):
         phones = '; '.join([phone.value for phone in self.phones])
-        return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones:{phones}\n'
+        return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones: {phones}\n'
 
     
     def __repr__(self) -> str:
