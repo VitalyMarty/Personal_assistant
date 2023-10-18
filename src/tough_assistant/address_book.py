@@ -46,8 +46,6 @@ class AddressBook(UserDict):
 
         record.edit_phone(old_phone, new_phone)
         return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name.value}'"
-    
-
 
     def find(self, name: str):
         record = self.data.get(name, None)
@@ -55,10 +53,11 @@ class AddressBook(UserDict):
             raise ValueError(f"There is no contact with name {name} in the book")
         return record
 
-    def delete(self, name):
-        if name in self.data:
-            del self.data[name]
-
+    def delete(self, name: str):
+        record = self.find(name)
+        del self.data[record.name]
+        return f'Contact {record.name} was deleted from contacts'
+    
     def iterator(self, chunk_size=10):
         record_names = list(self.data.keys())
         num_records = len(record_names)
