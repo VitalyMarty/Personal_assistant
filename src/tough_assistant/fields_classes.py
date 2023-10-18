@@ -96,7 +96,33 @@ class Date(Field):
     pass
 
 
+# Class note for Notebook
+class Note(Field):
 
+    @Field.value.setter
+    def value(self, value):
+        if re.match(r"^(.{3,250})$", value):
+            self._value = value
+        else:
+            print("Note must be in range of 3-250 symbols.")
+
+
+# Class for Tags. Only for check correct input
+# only words accepted due to technical assignment
+class Tag(Field):
+    # return __repr__ as string
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    # check input
+    @Field.value.setter
+    def value(self, value) -> None:
+        if re.match(r"^[A-Za-z]{3,10}$", value):
+            self._value = value
+        else:
+            print("Incorrect Tag format. Only 3-10 letters, without digits, spaces and special symbols accepted.")
+
+                                                                                            
                                                                                             #TODO Видалити вкінці
 # Приклад використання полів.
 if __name__ == '__main__':

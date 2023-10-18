@@ -1,37 +1,8 @@
 from collections import UserDict
-from fields_classes import Field
+from fields_classes import Note, Tag
 from datetime import datetime
-import re
 
 from backup import Backup, PickleStorage, VERSION
-
-# TODO move class in fields_classes.py in release
-class Note(Field):
-
-    @Field.value.setter
-    def value(self, value):
-        if re.match(r"^(.{3,250})$", value):
-            self._value = value
-        else:
-            print("Note must be in range of 3-250 symbols.")
-
-
-# TODO move class in fields_classes.py in release
-# Class for Tags. Only for check correct input
-# only words accepted due to technical assignment
-class Tag(Field):
-    # return __repr__ as string
-    def __repr__(self) -> str:
-        return self.__str__()
-
-    # check input
-    @Field.value.setter
-    def value(self, value) -> None:
-        if re.match(r"^[A-Za-z]{3,10}$", value):
-            self._value = value
-        else:
-            print("Incorrect Tag format. Only 3-10 letters, without digits, spaces and special symbols accepted.")
-
 
 class NoteRecord:
     def __init__(self, text: str) -> None:
