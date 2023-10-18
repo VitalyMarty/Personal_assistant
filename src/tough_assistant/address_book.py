@@ -151,13 +151,14 @@ class Record:
     def add_phone(self, number: str)-> None:
         self.phones.append(Phone(number))
 
-    def edit_phone(self, old_phone: str, new_phone: str)-> None:
-        for phone in self.phones:
-            if phone.value == old_phone:
-                phone.value = new_phone
+    def edit_phone(self, old_phone: Phone, new_phone: Phone)-> None:
+        for i, phone in enumerate(self.phones):
+            if phone.value == old_phone.value:
+                edit_phone_i = i
                 break
         else:
-            raise ValueError(f'Phone number - {old_phone} is not exist in contact: {self.name}')    
+            raise ValueError(f'Phone number - {old_phone.value} is not exist in contact: {self.name}') 
+        self.phones[edit_phone_i] = new_phone
 
     def find_phone(self, find_phone: str)-> Phone:
         for index, phone in enumerate(self.phones):
