@@ -76,7 +76,7 @@ def get_help():
     for count, command in enumerate(command_dict, start=1):
         if count <= 9:
             count = f'0{count}'
-        message = '\n'.join([message, f'{count}. {command:<17}-{command_dict[command].__doc__}'])
+        message = '\n'.join([message, f'{count}. {command:<20}-{command_dict[command].__doc__}'])
 
     return message
 
@@ -165,12 +165,14 @@ command_dict ={
     'delete email': contacts.delete_email_from_record,
     'delete birthday': contacts.delete_birthday_from_record,
     'show contacts': contacts.show_contacts,
-    'add note': None,
-    'find note': None,
-    'change note': None,
-    'delete note': None,
+    'add note': notes.add_note,
+    'find note': notes.find_note,
+    'find note by tag': notes.find_by_tag,
+    'edit note': notes.edit_note,
+    'delete note': notes.remove_note,
     'add tag': None,
-    'sort notes': None,
+    'sort notes': notes.sort_by_date,
+    'sort tags': notes.sort_tag
     'sort dir': None,
     'make file': None
 }
