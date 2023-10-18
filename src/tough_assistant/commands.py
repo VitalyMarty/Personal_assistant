@@ -172,7 +172,7 @@ command_dict ={
     'delete note': notes.remove_note,
     'add tag': None,
     'sort notes': notes.sort_by_date,
-    'sort tags': notes.sort_tag
+    'sort tags': notes.sort_tag,
     'sort dir': None,
     'make file': None
 }
