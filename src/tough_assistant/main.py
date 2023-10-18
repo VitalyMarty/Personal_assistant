@@ -1,3 +1,5 @@
+import os
+
 from address_book import AddressBook
 from backup import Backup, PickleStorage
 from commands import command_dict
@@ -56,6 +58,8 @@ def main():
             # Обробка команди від користувача
             result = parse_input(user_input)
 
+            #TODO Прибрати коментар та включити функцію очищення екрану перед виведенням іншого результату
+            # os.system('cls')
             # Вивід результату обробки команди
             print(result)
 
