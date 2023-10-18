@@ -11,10 +11,27 @@ class AddressBook(UserDict):
         self.data[record.name.value] = record
         return f'Added new contact {record.name.value} to contacts'
     
-    def add_address_to_record(self, name, address: str):
+    def add_address_to_record(self, name, address: str) -> str:
         record: Record = self.find(name)
         record.add_address(address)
-        return f'Added new address {record.name.value} to contacts'
+        return f'Added new address {record.address.value} to contact {record.name.value}'
+    
+    def add_phone_to_record(self, name, phone: str) -> str:
+        record: Record = self.find(name)
+        record.add_phone(phone)
+        return f'Added new phone {record.phones[-1]} to contact {record.name.value}'
+    
+    def add_email_to_record(self, name, email: str) -> str:
+        record: Record = self.find(name)
+        record.add_email(email)
+        return f'Added new email {record.email.value} to contact {record.name.value}'
+    
+    def add_birthday_to_record(self, name, birthday: str) -> str:
+        record: Record = self.find(name)
+        record.add_birthday(birthday)
+        return f'Added new birthday {record.birthday.value} to contact {record.name.value}'
+    
+
 
     def find(self, name):
         return self.data.get(name, None)
