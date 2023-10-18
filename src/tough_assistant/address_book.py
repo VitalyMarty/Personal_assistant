@@ -121,6 +121,7 @@ class AddressBook(UserDict):
         return dict_contacts 
     
     def find_birthdays_in_x_days(self, days):
+        """ Display a list of contacts whose birthday is a specified number of days from the current date """
         matching_contacts = f'Next birthdays within {days} days in contacts:'
         dict_contacts = contacts._collect_recods_by_birthday(days)
         print(dict_contacts)
