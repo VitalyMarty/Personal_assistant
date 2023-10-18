@@ -77,6 +77,26 @@ class AddressBook(UserDict):
         del self.data[record.name]
         return f'Contact {record.name} was deleted from contacts'
     
+    def delete_email(self, name):
+        record = self.find_record(name)
+        old_email = record.email
+        record.email = None
+        return f'Email {old_email} was deleted from contact {record.name}'
+    
+    def delete_birthday(self, name):
+        record = self.find_record(name)
+        old_birthday = record.birthday
+        record.birthday = None
+        return f'Email {old_birthday} was deleted from contact {record.name}'
+
+    def delete_address(self, name):
+        record = self.find_record(name)
+        old_address = record.address
+        record.address = None
+        return f'Email {old_address} was deleted from contact {record.name}'
+    
+    #TODO add delete phone 
+
 
 
     
@@ -94,8 +114,8 @@ class AddressBook(UserDict):
     def check_birthday(self, target_days):
         dict_contacts = {}
         
-        for contact in self.data:
-            name, days = contact.days_to_birthday(target_days)  
+        for record in self.data.values():
+            name, days = record.days_to_birthday(target_days)  
             if name:
                 dict_contacts[name] = days
                 
@@ -246,7 +266,7 @@ class Record:
         self.birthday = None
 
     def days_to_birthday(self, target_days):
-        days = self.birthday.get_days_to_next_birthday()
+        days = self.birthday.
         if days <= target_days:
             return self.name.value, days
             
