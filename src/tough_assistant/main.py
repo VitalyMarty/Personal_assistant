@@ -1,6 +1,6 @@
 import os
 
-from address_book import storage_addressbook, contacts
+from address_book import storage_addressbook, contacts, VERSION
 from note_book import storage_notebook, notes
 from commands import command_dict
 from decorators import input_error
@@ -37,6 +37,8 @@ def handler(command):
 
 
 def main():
+
+    print('{:<15} {}\n{:<15} {}\n{:<15} {}\n'.format('Tough Assistant', VERSION, 'AddressBook', contacts.version, 'NoteBook', notes.version))
 
 
     completer = WordCompleter(command_dict, ignore_case=True)

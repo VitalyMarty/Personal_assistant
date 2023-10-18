@@ -3,7 +3,7 @@ from fields_classes import Field
 from datetime import datetime
 import re
 
-from backup import Backup, PickleStorage
+from backup import Backup, PickleStorage, VERSION
 
 # TODO move class in fields_classes.py in release
 class Note(Field):
@@ -67,10 +67,11 @@ class NoteRecord:
 
 class Notebook(UserDict):
     # using for calling iter with parameters
-    def __init__(self, dict=None):
+    def __init__(self, dict=None, version=VERSION):
         super().__init__(dict)
         # notes counter (using as IDs to edit/delete)
         self.counter = 0
+        self.version = version
 
     # using __call__ for show all.
     def __call__(self) -> str:

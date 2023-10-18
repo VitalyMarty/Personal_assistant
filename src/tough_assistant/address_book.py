@@ -1,10 +1,14 @@
-from backup import Backup, PickleStorage
+from backup import Backup, PickleStorage, VERSION
 
 from collections import UserDict
 from fields_classes import Address, Birthday, Email, Name, Phone  
 
 
 class AddressBook(UserDict):
+
+    def __init__(self, version=VERSION):
+        super().__init__()
+        self.version = version
 
     def add_record(self, name):
         """Add new contact to the contacts. <name> """
