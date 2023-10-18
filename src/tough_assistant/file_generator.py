@@ -100,7 +100,7 @@ def main_generator(path=None):
 
 if __name__ == '__main__':
 
-    main_generator())
+    main_generator()
 
     
 
