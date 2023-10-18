@@ -74,7 +74,7 @@ class Birthday(Field):
         next_birthday = self._value.replace(year=today.year)
         if next_birthday < today:
             next_birthday - self._value.replace(year = today.year+1)
-        return abs(next_birthday - today)    
+        return abs(next_birthday - today).days    
             
 
 

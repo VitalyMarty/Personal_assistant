@@ -95,14 +95,7 @@ def get_help():
 #     """
 #     pass
 
-def find_birthdays_in_x_days(days):
-    matching_contacts = ''
-    dict_contacts = contacts.check_birthday(days)
-    for name in dict_contacts:
-        row = f'{name} - {dict_contacts[name]} days'
-        '\n'.join([matching_contacts, row])
-        
-    return matching_contacts
+
 
     
 
@@ -148,7 +141,7 @@ command_dict ={
     'good bye': goodbye,
     'help': get_help,
     'find in contacts': contacts.find_in_records,
-    'congratulate': find_birthdays_in_x_days,
+    'congratulate': contacts.find_birthdays_in_x_days,
     'add contact': contacts.add_record,
     'add address': contacts.add_address_to_record,
     'add phone': contacts.add_phone_to_record,
