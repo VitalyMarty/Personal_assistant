@@ -52,6 +52,9 @@ class Phone(Field):
         if not value.isnumeric():
                 return 'Wrong phones.'
         return value
+    
+    def __eq__(self, phone):
+        return self._value == phone.value
 
 
 class Birthday(Field):

@@ -19,7 +19,7 @@ class AddressBook(UserDict):
     #TODO change code for phone
     def add_phone_to_record(self, name, phone: str) -> str:
         record: Record = self.find_record(name)
-        record.add_phone(phone)
+        record.phones.append(Phone(phone))
         return f'Added new phone {record.phones[-1]} to contact {record.name}'
     
     def add_email_to_record(self, name, email: str) -> str:
@@ -38,14 +38,12 @@ class AddressBook(UserDict):
         record.address = new_address
         return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'"
 
-    #TODO change code for phone
     def edit_phone_in_record(self, name: str, old_phone, new_phone: str) -> str:
         record: Record = self.find_record(name)
         old_phone = Phone(old_phone)
         new_phone = Phone(new_phone)
-
         record.edit_phone(old_phone, new_phone)
-        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name.value}'"
+        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name}'"
     
     def edit_email_in_record(self, name: str, new_email: str) -> str:
         record: Record = self.find_record(name)
@@ -77,26 +75,29 @@ class AddressBook(UserDict):
         del self.data[record.name]
         return f'Contact {record.name} was deleted from contacts'
     
-    def delete_email(self, name):
+    def delete_email_from_record(self, name):
         record = self.find_record(name)
         old_email = record.email
         record.email = None
         return f'Email {old_email} was deleted from contact {record.name}'
     
-    def delete_birthday(self, name):
+    def delete_birthday_from_record(self, name):
         record = self.find_record(name)
         old_birthday = record.birthday
         record.birthday = None
         return f'Email {old_birthday} was deleted from contact {record.name}'
 
-    def delete_address(self, name):
+    def delete_address_from_record(self, name):
         record = self.find_record(name)
         old_address = record.address
         record.address = None
         return f'Email {old_address} was deleted from contact {record.name}'
     
-    #TODO add delete phone 
-
+    def delete_phone_from_record(self, name, phone:str):
+        record: Record = self.find_record(name)
+        phone = Phone(phone)
+        return record.remove_phone(phone)
+    
 
 
     
@@ -119,23 +120,43 @@ class AddressBook(UserDict):
             if name:
                 dict_contacts[name] = days
                 
-        return dict_contacts  
+        return dict_contacts 
 
-    def search_contacts_by_name(self, name):
+    def _search_contacts_by_name(self, name):
         found_contacts_by_name = []
         for record in self.data.values():
-            if record.name.value.lower() == name.lower():
+            if name.lower() in record.name.lower():
                 found_contacts_by_name.append(record)
         return found_contacts_by_name
 
-    def search_contacts_by_phone(self, phone):
+    def _search_contacts_by_phone(self, phone):
         found_contacts_by_phone = []
         for record in self.data.values():
             for contact_phone in record.phones:
-                if contact_phone.value == phone:
+                if phone in contact_phone.value:
                     found_contacts_by_phone.append(record)
-                    break
         return found_contacts_by_phone
+    
+    def find_in_records(self, search_data: str):
+        found_contacts = []
+        found_contacts.extend(self._search_contacts_by_name(search_data))
+        found_contacts.extend(self._search_contacts_by_phone(search_data))
+
+        if not found_contacts:
+            return f'Not find contacts with search parameters "{search_data}"'
+        else:
+            str_result = f'The contacts has next records with search parameters "{search_data}":'
+            for ind, record in enumerate(found_contacts, start=1):
+                # Якщо менше ind < 10, то буде 01, 02, ..., 09, якщо більше, то 10, 11, ...
+                ind = f'0{ind}' if ind <= 9 else str(ind)
+                print(str_result)
+                row = f'\n{ind}.\n {str(record)}'
+                print(row)
+                str_result = ''.join([str_result, row])  
+            print(str_result)
+
+        return str_result
+
             
     def show_contacts(self):
         message = 'Book has next records:\n'
@@ -147,7 +168,7 @@ class AddressBook(UserDict):
 class Record:
     def __init__(self, name:str):
         self._name = Name(name)
-        self._phones = []
+        self.phones = []
         self._address = None  
         self._email = None
         self._birthday = None
@@ -191,41 +212,6 @@ class Record:
     def birthday(self, birthday: str):
         self._birthday = Birthday(birthday)
 
-    #TODO Add getter and setter for phones
-
-    
-    
-
-
-    
-
-    def add_address(self, address: str):
-        self.address = Address(address)
-
-    def edit_address(self, new_address: str):
-        if self.address:
-            self.address.value = new_address
-        else:
-            raise ValueError("No address to edit.")
-
-    def remove_address(self):
-        self.address = None
-
-    def add_email(self, email: str):
-        self.email = Email(email)
-
-    def edit_email(self, new_email: str):
-        if self.email:
-            self.email.value = new_email
-        else:
-            raise ValueError("No email to edit.")
-
-    def remove_email(self):
-        self.email = None
-        
-    def add_phone(self, number: str)-> None:
-        self.phones.append(Phone(number))
-
     def edit_phone(self, old_phone: Phone, new_phone: Phone)-> None:
         for i, phone in enumerate(self.phones):
             if phone.value == old_phone.value:
@@ -235,23 +221,27 @@ class Record:
             raise ValueError(f'Phone number - {old_phone.value} is not exist in contact: {self.name}') 
         self.phones[edit_phone_i] = new_phone
 
-    def find_phone(self, find_phone: str)-> Phone:
+    def find_phone(self, find_phone: Phone)-> Phone:
         for index, phone in enumerate(self.phones):
-            if phone.value == find_phone:
+            if phone == find_phone:
                 return self.phones[index]
+        return ValueError(f'Phone number - {find_phone.value} is not exist in contact: {self.name}') 
             
-    def find_address(self, find_address: str):
-        if self.address == find_address:
-            return self.address
+    # def find_address(self, find_address: str):
+    #     if self.address == find_address:
+    #         return self.address
 
-    def find_email(self, find_email: str):
-        if self.email == find_email:
-            return self.email
+    # def find_email(self, find_email: str):
+    #     if self.email == find_email:
+    #         return self.email
             
     def remove_phone(self, remove_phone)-> None:
         for index, phone in enumerate(self.phones):
-            if phone.value == remove_phone:
+            if phone == remove_phone:
                 del self.phones[index]
+                return f'Phone {phone.value} was deleted from contact {self.name}'
+        return ValueError(f'Phone number - {remove_phone.value} is not exist in contact: {self.name}') 
+
 
     def add_birthday(self, birthday: str) -> None:
         self.birthday = Birthday(birthday)
@@ -266,7 +256,7 @@ class Record:
         self.birthday = None
 
     def days_to_birthday(self, target_days):
-        days = self.birthday.
+        days = self.birthday
         if days <= target_days:
             return self.name.value, days
             
@@ -275,8 +265,8 @@ class Record:
     #     return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
     
     def __str__(self):
-        phones = '; '.join([phone.value for phone in self._phones])
-        return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones:{self._phones}\n'
+        phones = '; '.join([phone.value for phone in self.phones])
+        return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones:{phones}\n'
 
     
     # def __repr__(self) -> str:
