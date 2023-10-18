@@ -91,8 +91,8 @@ def generator_folders_and_files(path):
 
 
 def main_generator(path=None):
-
-    parent_folder = Path(sys.argv[1])
+    parent_folder = Path(path)
+    # parent_folder = Path(sys.argv[1])
     parent_folder.mkdir(parents=True, exist_ok=True)
     print(f'{parent_folder = }')
     generator_folders_and_files(parent_folder)
