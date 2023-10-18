@@ -42,8 +42,18 @@ class AddressBook(UserDict):
         record.add_birthday(birthday)
         return f'Added new birthday {record.birthday.value} to contact {record.name.value}'
     
-    def change_record_address(self, name: str, new_address: str) -> str:
-        pass
+    def edit_address_in_record(self, name: str, new_address: str) -> str:
+        record: Record = self.find(name)
+        old_address = record.address.value
+        record.edit_address(new_address)
+        return f"The old address '{old_address}' was changed to a new '{record.address.value}' in the contact '{record.name.value}'"
+
+    def edit_phone_in_record(self, name: str, old_phone, new_phone: str) -> str:
+        record: Record = self.find(name)
+        old_phone = Phone(old_phone)
+        new_phone = Phone(new_phone)
+        record.edit_phone(old_phone, new_phone)
+        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name.value}'"
     
 
 
