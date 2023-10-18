@@ -6,8 +6,10 @@ from fields_classes import Address, Birthday, Email, Name, Phone
 
 class AddressBook(UserDict):
 
-    def add_record(self, record):
+    def add_record(self, name):
+        record = Record(name)
         self.data[record.name.value] = record
+        return f'Added new contact {record.name.value} to contacts'
 
     def find(self, name):
         return self.data.get(name, None)
