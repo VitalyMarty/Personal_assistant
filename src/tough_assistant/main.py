@@ -1,9 +1,9 @@
-from address_book import AddressBook
-from backup import Backup, PickleStorage
-from commands import command_dict
-from note_book import Notebook
-from decorators import input_error
+import os
 
+from address_book import storage_addressbook, contacts
+from note_book import storage_notebook, notes
+from commands import command_dict
+from decorators import input_error
 
 
 from prompt_toolkit import prompt
@@ -20,7 +20,7 @@ def parse_input(user_input: str) -> str:
             data = user_input[len(new_input):].split()
             break
     if data:
-        return handler(new_input)(data)
+        return handler(new_input)(*data)
     return handler(new_input)()
 
 
@@ -35,16 +35,9 @@ def handler(command):
     return command_dict.get(command, break_func)
 
 
+
 def main():
 
-    # Створюємо сховище, де зберігається файл з контактами та нотатками
-    storage_addressbook = Backup(PickleStorage('test_addressbook.pickle'))
-    storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
-
-
-    # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
-    contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
-    notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
 
     completer = WordCompleter(command_dict, ignore_case=True)
     try:
@@ -56,6 +49,8 @@ def main():
             # Обробка команди від користувача
             result = parse_input(user_input)
 
+            #TODO Прибрати коментар та включити функцію очищення екрану перед виведенням іншого результату
+            # os.system('cls')
             # Вивід результату обробки команди
             print(result)
 
@@ -66,6 +61,9 @@ def main():
         # При завершенні роботи зберігаємо contacts та notes
         storage_addressbook.save(contacts)
         storage_notebook.save(notes)
+        print(f'Contacts saved to file: {storage_addressbook.storage.filename}')
+        print(f'Notes saved to file: {storage_addressbook.storage.filename}')
+
 
 
 

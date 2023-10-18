@@ -1,13 +1,51 @@
+from backup import Backup, PickleStorage
+
 from collections import UserDict
 from fields_classes import Address, Birthday, Email, Name, Phone  
-from datetime import date
-import pickle
 
 
 class AddressBook(UserDict):
 
-    def add_record(self, record):
+    def add_record(self, name):
+        record = Record(name)
         self.data[record.name.value] = record
+        return f'Added new contact {record.name.value} to contacts'
+    
+    def add_address_to_record(self, name, address: str) -> str:
+        record: Record = self.find(name)
+        if record is None:
+            return f"There is no contact with name {name} in the book"
+
+        record.add_address(address)
+        return f'Added new address {record.address.value} to contact {record.name.value}'
+    
+    def add_phone_to_record(self, name, phone: str) -> str:
+        record: Record = self.find(name)
+        if record is None:
+            return f"There is no contact with name {name} in the book"
+
+        record.add_phone(phone)
+        return f'Added new phone {record.phones[-1]} to contact {record.name.value}'
+    
+    def add_email_to_record(self, name, email: str) -> str:
+        record: Record = self.find(name)
+        if record is None:
+            return f"There is no contact with name {name} in the book"
+
+        record.add_email(email)
+        return f'Added new email {record.email.value} to contact {record.name.value}'
+    
+    def add_birthday_to_record(self, name, birthday: str) -> str:
+        record: Record = self.find(name)
+        if record is None:
+            return f"There is no contact with name {name} in the book"
+        record.add_birthday(birthday)
+        return f'Added new birthday {record.birthday.value} to contact {record.name.value}'
+    
+    def change_record_address(self, name: str, new_address: str) -> str:
+        pass
+    
+
 
     def find(self, name):
         return self.data.get(name, None)
@@ -53,14 +91,21 @@ class AddressBook(UserDict):
                     break
         return found_contacts_by_phone
             
+    def show_contacts(self):
+        message = 'Book has next records:\n'
+        for count, key_record in enumerate(self.data, start=1):
+            message = '\n'.join([message, f'{count}.\n{self.data[key_record]}'])
 
+        return message
 
 class Record:
     def __init__(self, name:str, phone:str=None, birthday:str=None):
         self.name = Name(name)
         self.phones = []
         self.address = None  
-        self.email = None  
+        self.email = None
+        self.birthday = None
+         
 
         if phone:
             self.add_phone(phone)
@@ -139,15 +184,24 @@ class Record:
         if days <= target_days:
             return self.name.value, days
             
-    def __str__(self) -> str:
-        days = str(self.days_to_birthday())
-        return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
+    # def __str__(self) -> str:
+    #     days = str(self.days_to_birthday())
+    #     return f" Contact name: {self.name.value:<10} birthday: {str(self.birthday):<11}({days:<4} days) phones: {'; '.join(p.value for p in self.phones)}"
+    
+    def __str__(self):
+        phones = '; '.join([phone.value for phone in self.phones])
+        return f'Contact: {self.name};\nBirthday: {self.birthday};\nAddress: {self.address};\nEmail: {self.email};\nPhones:{phones}\n'
+
     
     def __repr__(self) -> str:
         self.phones_repr = ', '.join([phone.value for phone in self.phones])
         return f'Record({self.name.value}, {self.phones_repr}, {self.birthday.value})'
     
     
-        
+# Створюємо сховище, де зберігається файл з контактами та нотатками
+storage_addressbook = Backup(PickleStorage('test_addressbook.pickle'))
+# Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
+contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
+       
 
 

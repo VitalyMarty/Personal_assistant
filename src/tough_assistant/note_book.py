@@ -3,6 +3,8 @@ from fields_classes import Field
 from datetime import datetime
 import re
 
+from backup import Backup, PickleStorage
+
 # TODO move class in fields_classes.py in release
 class Note(Field):
 
@@ -188,6 +190,16 @@ class Notebook(UserDict):
         print(f"Unique tags in Notebook: {', '.join(sorted(unique_tags))}" if unique_tags \
             else "There are no tags in Notebook. Try to add it first.")
         return ""
+
+# Створюємо сховище, де зберігається файл з контактами та нотатками
+storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
+
+
+# Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
+notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
+
+
+
 
 
 if __name__ == "__main__":
