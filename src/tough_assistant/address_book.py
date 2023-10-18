@@ -124,6 +124,16 @@ class Record:
             self.add_birthday(birthday)
         
     # Реалізація класу
+    @property
+    def address(self):
+        return self.address.value
+    
+    @address.setter
+    def address(self, address: str):
+        self.address = Address(address)
+
+    
+
     def add_address(self, address: str):
         self.address = Address(address)
 
