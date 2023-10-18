@@ -146,6 +146,7 @@ command_dict ={
     'close': goodbye,
     'good bye': goodbye,
     'help': get_help,
+    'find in contacts': contacts.find_in_records,
     'congratulate': find_birthdays_in_x_days,
     'add contact': contacts.add_record,
     'add address': contacts.add_address_to_record,

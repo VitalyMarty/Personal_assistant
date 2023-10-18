@@ -120,23 +120,43 @@ class AddressBook(UserDict):
             if name:
                 dict_contacts[name] = days
                 
-        return dict_contacts  
+        return dict_contacts 
 
-    def search_contacts_by_name(self, name):
+    def _search_contacts_by_name(self, name):
         found_contacts_by_name = []
         for record in self.data.values():
-            if record.name.value.lower() == name.lower():
+            if name.lower() in record.name.lower():
                 found_contacts_by_name.append(record)
         return found_contacts_by_name
 
-    def search_contacts_by_phone(self, phone):
+    def _search_contacts_by_phone(self, phone):
         found_contacts_by_phone = []
         for record in self.data.values():
             for contact_phone in record.phones:
-                if contact_phone.value == phone:
+                if phone in contact_phone.value:
                     found_contacts_by_phone.append(record)
-                    break
         return found_contacts_by_phone
+    
+    def find_in_records(self, search_data: str):
+        found_contacts = []
+        found_contacts.extend(self._search_contacts_by_name(search_data))
+        found_contacts.extend(self._search_contacts_by_phone(search_data))
+
+        if not found_contacts:
+            return f'Not find contacts with search parameters "{search_data}"'
+        else:
+            str_result = f'The contacts has next records with search parameters "{search_data}":'
+            for ind, record in enumerate(found_contacts, start=1):
+                # Якщо менше ind < 10, то буде 01, 02, ..., 09, якщо більше, то 10, 11, ...
+                ind = f'0{ind}' if ind <= 9 else str(ind)
+                print(str_result)
+                row = f'\n{ind}.\n {str(record)}'
+                print(row)
+                str_result = ''.join([str_result, row])  
+            print(str_result)
+
+        return str_result
+
             
     def show_contacts(self):
         message = 'Book has next records:\n'
