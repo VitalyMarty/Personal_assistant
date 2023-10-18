@@ -1,5 +1,7 @@
 import pickle
 
+VERSION = 'v.0.0.1'
+
 class Storage:
     def save(self):
         pass
