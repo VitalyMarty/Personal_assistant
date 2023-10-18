@@ -1,3 +1,5 @@
+from address_book import contacts
+from note_book import notes
 
 
 def add():
@@ -72,7 +74,9 @@ def get_help():
     """Show available commands"""
     message = 'I can do next commands:\n'
     for count, command in enumerate(command_dict, start=1):
-        message = '\n'.join([message, f'{count}. {command:<10}-{command_dict[command].__doc__}'])
+        if count <= 9:
+            count = f'0{count}'
+        message = '\n'.join([message, f'{count}. {command:<17}-{command_dict[command].__doc__}'])
 
     return message
 
@@ -90,7 +94,7 @@ def get_help():
 #     """
 #     pass
 
-def find_birthdays_in_x_days(contacts, days):
+def find_birthdays_in_x_days(days):
     matching_contacts = ''
     dict_contacts = contacts.check_birthday(days)
     for name in dict_contacts:
@@ -141,5 +145,27 @@ command_dict ={
     'exit': goodbye,
     'close': goodbye,
     'good bye': goodbye,
-    'help': get_help
+    'help': get_help,
+    'congratulate': find_birthdays_in_x_days,
+    # 'add contact': add_contact,
+    'add address': None,
+    'add phone': None,
+    'add email': None,
+    'add birthday': None,
+    'change address': None,
+    'change phone': None,
+    'change email': None,
+    'change birthday': None,
+    'change name': None,
+    'find contact': contacts.find,
+    'delete contact': contacts.delete,
+    'show contacts': None,
+    'add note': None,
+    'find note': None,
+    'change note': None,
+    'delete note': None,
+    'add tag': None,
+    'sort notes': None,
+    'sort dir': None,
+    'make file': None
 }

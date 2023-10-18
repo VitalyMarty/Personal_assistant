@@ -1,11 +1,9 @@
 import os
 
-from address_book import AddressBook
-from backup import Backup, PickleStorage
+from address_book import storage_addressbook, contacts
+from note_book import storage_notebook, notes
 from commands import command_dict
-from note_book import Notebook
 from decorators import input_error
-
 
 
 from prompt_toolkit import prompt
@@ -40,14 +38,6 @@ def handler(command):
 
 def main():
 
-    # Створюємо сховище, де зберігається файл з контактами та нотатками
-    storage_addressbook = Backup(PickleStorage('test_addressbook.pickle'))
-    storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
-
-
-    # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
-    contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
-    notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
 
     completer = WordCompleter(command_dict, ignore_case=True)
     try:
@@ -71,6 +61,9 @@ def main():
         # При завершенні роботи зберігаємо contacts та notes
         storage_addressbook.save(contacts)
         storage_notebook.save(notes)
+        print(f'Contacts saved to file: {storage_addressbook.storage.filename}')
+        print(f'Notes saved to file: {storage_addressbook.storage.filename}')
+
 
 
 
