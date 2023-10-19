@@ -183,7 +183,7 @@ class AddressBook(UserDict):
     def edit_name_in_record(self, *args) -> str:
         """Edit name in the contact. <name> <new name>"""
         if not args:
-            return f'You must enter name of contact and birthday! Try again'
+            return f'You must enter name of contact and new name! Try again'
         record, new_args = self.find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
@@ -197,7 +197,7 @@ class AddressBook(UserDict):
     def delete_record(self, *args):
         """Remove a contact from the contacts. <name>"""
         if not args:
-            return f'You must enter name of contact and birthday! Try again'
+            return f'You must enter name of contact! Try again'
         record, new_args = self.find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
@@ -207,7 +207,7 @@ class AddressBook(UserDict):
     def delete_email_from_record(self, *args):
         """Remove a email from the contact. <name> <email>"""
         if not args:
-            return f'You must enter name of contact and birthday! Try again'
+            return f'You must enter name of contact! Try again'
         record, new_args = self.find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
@@ -220,7 +220,7 @@ class AddressBook(UserDict):
     def delete_birthday_from_record(self, *args):
         """Remove date of birthday from the contact. <name> <date>"""
         if not args:
-            return f'You must enter name of contact and birthday! Try again'
+            return f'You must enter name of contact! Try again'
         record, new_args = self.find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
@@ -230,12 +230,18 @@ class AddressBook(UserDict):
         record.birthday = None
         return f'Birthday {old_birthday} was deleted from contact {record.name}.\n\n{record}'
 
-    def delete_address_from_record(self, name):
+    def delete_address_from_record(self, *args):
         """Remove an address from the contact. <name> <address>"""
-        record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not record.address:
+            return f'There is no address in contact {record.name}. You need to add first.'
         old_address = record.address
         record.address = None
-        return f'Address {old_address} was deleted from contact {record.name}'
+        return f'Address {old_address} was deleted from contact {record.name}.\n\n{record}'
     
     def delete_phone_from_record(self, name, phone:str):
         """Remove a phone from the contact. <name> <phone> """
