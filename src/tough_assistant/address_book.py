@@ -17,6 +17,8 @@ class AddressBook(UserDict):
         name = ' '.join(args)
         # print(name)
         record = Record(name)
+        if record.name in self.data:
+            return f"The contact with name {record.name} already exists in book"
         self.data[record.name] = record
         return f'Added new contact {record.name} to contacts:\n\n{record}'
     
@@ -202,12 +204,18 @@ class AddressBook(UserDict):
         del self.data[record.name]
         return f'Contact {record.name} was deleted from contacts'
     
-    def delete_email_from_record(self, name):
+    def delete_email_from_record(self, *args):
         """Remove a email from the contact. <name> <email>"""
-        record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and birthday! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not record.email:
+            return f'There is no email in contact {record.name}. You need to add first.'
         old_email = record.email
         record.email = None
-        return f'Email {old_email} was deleted from contact {record.name}'
+        return f'Email {old_email} was deleted from contact {record.name}.\n\n{record}'
     
     def delete_birthday_from_record(self, name):
         """Remove date of birthday from the contact. <name> <date>"""
