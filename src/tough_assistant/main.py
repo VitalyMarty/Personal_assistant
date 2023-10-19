@@ -19,6 +19,7 @@ def parse_input(user_input: str) -> str:
             new_input = key
             data = user_input[len(new_input):].split()
             break
+    print('parcer', data)
     if data:
         return handler(new_input)(*data)
     return handler(new_input)()
@@ -50,7 +51,7 @@ def main():
             # Processing user command
             result = parse_input(user_input)
 
-            os.system('cls')
+            # os.system('cls')
             # Displaying the result of command processing
             print(result)
 

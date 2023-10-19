@@ -10,17 +10,45 @@ class AddressBook(UserDict):
         super().__init__()
         self.version = version
 
-    def add_record(self, name):
+    def add_record(self, *args):
         """Add new contact to the contacts. <name> """
+        # print(args)
+        if not args:
+            return f'You must enter name of contact! Try again'
+        name = ' '.join(args)
+        # print(name)
         record = Record(name)
         self.data[record.name] = record
-        return f'Added new contact {record.name} to contacts'
+        return f'Added new contact {record.name} to contacts:\n\n{record}'
     
-    def add_address_to_record(self, name, address: str) -> str:
+    def add_address_to_record(self, *args) -> str:
         """Add address to the contact. <name> <address>"""
-        record: Record = self.find_record(name)
-        record.address = address
-        return f'Added new address {record.address} to contact {record.name}'
+        print('input func',args)
+        if not args:
+            return f'You must enter name of contact! Try again'
+        set_variant_of_name = list(args)
+        name = ''
+        print('set_variant_of_name before for ', set_variant_of_name)
+        for i in args:
+            name = ' '.join([name, set_variant_of_name.pop(0)]).strip().title()
+            print(name)
+            record: Record = self.find_record(name)
+            if record:
+                print('record', record.name)
+                break
+        print('set_variant_of_name', set_variant_of_name)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not set_variant_of_name:
+            return f'You must enter address for adding to the contact {record.name}'
+        
+
+
+        # # raise ValueError(f"There is no contact with name {name} in the book")
+
+        # record: Record = self.find_record(name)
+        # record.address = address
+        # return f'Added new address {record.address} to contact {record.name}'
     
     #TODO change code for phone
     def add_phone_to_record(self, name, phone: str) -> str:
@@ -81,8 +109,6 @@ class AddressBook(UserDict):
     def find_record(self, name: str):
         """Find contact by name. <name>"""
         record = self.data.get(name, None)
-        if record is None:
-            raise ValueError(f"There is no contact with name {name} in the book")
         return record
 
     def delete_record(self, name: str):
