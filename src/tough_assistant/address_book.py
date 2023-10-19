@@ -21,41 +21,40 @@ class AddressBook(UserDict):
         self.data[record.name] = record
         return f'Added new contact {record.name} to contacts:\n\n{record}'
     
+    def find_record(self, *args):
+        """Find contact by name. <name>"""
+        set_variant_of_name = list(args)
+        name = ''
+        for i in args:
+            name = ' '.join([name, set_variant_of_name.pop(0)]).strip().title()
+            record: Record = self.data.get(name, None)
+            if record:
+                args_without_name = set_variant_of_name
+                return record, args_without_name
+        else:
+            return None, None
+
+    
     def add_address_to_record(self, *args) -> str:
         """Add address to the contact. <name> <address>"""
         print('input func',args)
         if not args:
-            return f'You must enter name of contact! Try again'
-        set_variant_of_name = list(args)
-        name = ''
-        print('set_variant_of_name before for ', set_variant_of_name)
-        for i in args:
-            name = ' '.join([name, set_variant_of_name.pop(0)]).strip().title()
-            print(name)
-            record: Record = self.find_record(name)
-            if record:
-                print('record', record.name)
-                break
-        print('set_variant_of_name', set_variant_of_name)
+            return f'You must enter name of contact and address! Try again'
+        record, new_args = self.find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
-        if not set_variant_of_name:
+        if not new_args:
             return f'You must enter address for adding to the contact {record.name}'
         
-
-
-        # # raise ValueError(f"There is no contact with name {name} in the book")
-
-        # record: Record = self.find_record(name)
-        # record.address = address
-        # return f'Added new address {record.address} to contact {record.name}'
+        address = ' '.join(new_args)
+        record.address = address
+        return f'Added new address {record.address} to contact {record.name}.\n\n{record}'
     
-    #TODO change code for phone
     def add_phone_to_record(self, name, phone: str) -> str:
         """Add phone to the contact. <name> <phone>"""
         record: Record = self.find_record(name)
         record.phones.append(Phone(phone))
-        return f'Added new phone {record.phones[-1]} to contact {record.name}'
+        return f"Added new phone '{record.phones[-1]}' to contact {record.name}"
     
     def add_email_to_record(self, name, email: str) -> str:
         """Add email to the contact. <name> <email>"""
@@ -105,11 +104,6 @@ class AddressBook(UserDict):
         record.name = new_name
         self.data[record.name] = self.data.pop(old_name)
         return f"The old name '{old_name}' was changed to a new '{record.name}' in the contact '{record.name}'"
-
-    def find_record(self, name: str):
-        """Find contact by name. <name>"""
-        record = self.data.get(name, None)
-        return record
 
     def delete_record(self, name: str):
         """Remove a contact from the contacts. <name>"""
