@@ -217,12 +217,18 @@ class AddressBook(UserDict):
         record.email = None
         return f'Email {old_email} was deleted from contact {record.name}.\n\n{record}'
     
-    def delete_birthday_from_record(self, name):
+    def delete_birthday_from_record(self, *args):
         """Remove date of birthday from the contact. <name> <date>"""
-        record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and birthday! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not record.birthday:
+            return f'There is no birthday in contact {record.name}. You need to add first.'
         old_birthday = record.birthday
         record.birthday = None
-        return f'Birthday {old_birthday} was deleted from contact {record.name}'
+        return f'Birthday {old_birthday} was deleted from contact {record.name}.\n\n{record}'
 
     def delete_address_from_record(self, name):
         """Remove an address from the contact. <name> <address>"""
