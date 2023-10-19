@@ -16,6 +16,7 @@ def process_archive(source_path, destination_path):
 
 
 def sort_and_rename_files(folder_path):
+    """Sort files and folders in specified directory"""
     ignored_folders = {'archives', 'video', 'audio', 'documents', 'images'}
 
     files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]

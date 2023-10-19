@@ -14,39 +14,40 @@ Package installation instructions:
 
 Main Assistant Commands:
 
-    hello: hello,
-    exit: goodbye,
-    close: goodbye,
-    good bye: goodbye,
-    help: get_help,
-    find in contacts: contacts.find_in_records,
-    congratulate: contacts.find_birthdays_in_x_days,
-    add contact: contacts.add_record,
-    add address: contacts.add_address_to_record,
-    add phone: contacts.add_phone_to_record,
-    add email: contacts.add_email_to_record,
-    add birthday: contacts.add_birthday_to_record,
-    edit address: contacts.edit_address_in_record,
-    edit phone: contacts.edit_phone_in_record,
-    edit email: contacts.edit_email_in_record,
-    edit birthday: contacts.edit_birthday_in_record,
-    edit name: contacts.edit_name_in_record,
-    find contact: contacts.find_record,
-    delete contact: contacts.delete_record,
-    delete address: contacts.delete_address_from_record,
-    delete phone: contacts.delete_phone_from_record,
-    delete email: contacts.delete_email_from_record,
-    delete birthday: contacts.delete_birthday_from_record,
-    show contacts: contacts.show_contacts,
-    show notes: notes.show_all,
-    add note: notes.add_note,
-    find note: notes.find_note,
-    find note by tag': notes.find_by_tag,
-    edit note: notes.edit_note,
-    delete note: notes.remove_note,
-    add tag: notes.add_tag,
-    sort notes: notes.sort_by_date,
-    sort tags: notes.sort_tag,
-    sort dir: sort_and_rename_files,
-    joke: main_generator,
-    make file: None
+    hello: Greeting.
+    exit: Exit Assistant.
+    close: Exit Assistant.
+    good bye: Exit Assistant.
+    help: Show all available command.
+    find in contacts: Find contact based on available information.
+    congratulate: Display a list of contacts whose birthday is a specified number of days from the current date.
+    add contact: Add new contact to the contacts. <name>
+    add address: Add address to the contact. <name> <address>
+    add phone: Add phone to the contact. <name> <phone>
+    add email: Add email to the contact. <name> <email>
+    add birthday: Add date of birthday to the contact. <name> <date>
+    edit address: Edit address in the contact. <name> <old address> <new address>
+    edit phone: Edit phone in the contact. <name> <old phone> <new phone>
+    edit email: Edit email in the contact. <name> <old email> <new email>
+    edit birthday: Edit date of birthday in the contact. <name> <old date> <new date>
+    edit name: Edit name in the contact. <name> <new name>
+    find contact: Find contact by name. <name>
+    delete contact: Remove a contact from the contacts. <name>
+    delete address: Remove an address from the contact. <name> <address>
+    delete phone: Remove a phone from the contact. <name> <phone>
+    delete email: Remove a email from the contact. <name> <email>
+    delete birthday: Remove date of birthday from the contact. <name> <date>
+    show contacts: Show all contacts in AddressBook.
+    show notes: Show all Notes in Notebook.
+    add note: Add Note.
+    find note: Find Note.
+    find by tag': Find note by tag
+    edit note: Edit Note.
+    delete note: Remove Note.
+    add tag: Add tag to the Note.
+    sort notes: Sort Notes by create/edit date.
+    show tags: Show all existing and unique tags in Notebook.
+    sort tags: Sort tags in Note.
+    clear tags: Clear tags in Note
+    sort dir: Sort files and folders in specified directory
+    joke: Generate folder with random files and other folders in it
