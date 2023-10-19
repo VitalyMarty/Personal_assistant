@@ -313,4 +313,5 @@ storage_addressbook = Backup(PickleStorage(FILENAME_ADDRESSBOOK))
 contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
        
 
-
+if __name__ == "__main__":
+    print("Module AddressBook")

@@ -35,7 +35,6 @@ def handler(command):
     return command_dict.get(command, break_func)
 
 
-
 def main():
 
     print('{:<15} {}\n{:<15} {}\n{:<15} {}\n'.format('Tough Assistant', VERSION, 'AddressBook', contacts.version, 'NoteBook', notes.version))
@@ -51,8 +50,7 @@ def main():
             # Обробка команди від користувача
             result = parse_input(user_input)
 
-            #TODO Прибрати коментар та включити функцію очищення екрану перед виведенням іншого результату
-            # os.system('cls')
+            os.system('cls')
             # Вивід результату обробки команди
             print(result)
 
@@ -65,7 +63,6 @@ def main():
         storage_notebook.save(notes)
         print(f'Contacts saved to file: {storage_addressbook.storage.filename}')
         print(f'Notes saved to file: {storage_addressbook.storage.filename}')
-
 
 
 

@@ -6,7 +6,7 @@ import shutil
 MAX_LEN_NAME = 12           # Максимальна довжина назви файлу або папки
 MAX_FOLDERS_DEEP = 2        # Максимальна глибина вкладень в папках
 MAX_RANDOM_FOLDERS = 2      # Максимальна кількість папок
-MAX_RANDOM_FILES = 10        # Максимальна кількість файлів
+MAX_RANDOM_FILES = 10       # Максимальна кількість файлів
 
 
 def add_folder(path, name=None):

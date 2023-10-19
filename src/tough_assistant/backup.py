@@ -3,8 +3,8 @@ from contextlib import suppress
 
 
 VERSION = 'v.0.0.1'
-FILENAME_ADDRESSBOOK = 'test_addressbook.pickle'
-FILENAME_NOTEBOOK = 'test_notebook.pickle'
+FILENAME_ADDRESSBOOK = 'addressbook.pickle'
+FILENAME_NOTEBOOK = 'notebook.pickle'
 
 
 class Storage:
@@ -43,38 +43,5 @@ class Backup(Storage):
         return self.storage.load()
        
 
-
-
-
-       
-
-# TODO Видалити коли буде не потрібно   
-# Це тестовий if для перевірки працездатності коду. 
 if __name__ == "__main__":
-
-    class Test:
-        def __init__(self):
-            self.test = 10
-
-    storage_addressbook = Backup(PickleStorage('addressbook.pickle'))
-    storage_notebook = Backup(PickleStorage('notebook.pickle'))
-
-    object1 = Test()
-    object2 = Test()
-    object2.test = 20
-
-    print(object1.test)
-    print(object2.test)
-
-    storage_addressbook.save(object1)
-    storage_notebook.save(object2)
-
-    copy_object1 = storage_addressbook.load()
-    copy_object2 = storage_notebook.load()
-
-    print(copy_object1.test)
-    print(copy_object2.test)
-
-
-
-
+    print("Module Backup")

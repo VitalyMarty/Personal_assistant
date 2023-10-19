@@ -64,3 +64,6 @@ command_dict ={
     'sort dir': sort_and_rename_files,
     'joke': main_generator,
 }
+
+if __name__ == "__main__":
+    print("Module Commands")
