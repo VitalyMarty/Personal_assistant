@@ -12,7 +12,6 @@ class AddressBook(UserDict):
 
     def add_record(self, *args):
         """Add new contact to the contacts. <name> """
-        # print(args)
         if not args:
             return f'You must enter name of contact! Try again'
         name = ' '.join(args)
@@ -177,15 +176,21 @@ class AddressBook(UserDict):
             return "The new birthday is incorrect."
         old_birthday = record.birthday
         record.birthday = ' '.join(new_args)
-        return f"The old birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}'\n\n{record}"
+        return f"The old birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}.'\n\n{record}"
     
-    def edit_name_in_record(self, name: str, new_name: str) -> str:
+    def edit_name_in_record(self, *args) -> str:
         """Edit name in the contact. <name> <new name>"""
-        record: Record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and birthday! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not new_args:
+            return f'You must enter new name for editing in the contact {record.name}'
         old_name = record.name
-        record.name = new_name
+        record.name = ' '.join(new_args)
         self.data[record.name] = self.data.pop(old_name)
-        return f"The old name '{old_name}' was changed to a new '{record.name}' in the contact '{record.name}'"
+        return f"The old name '{old_name}' was changed to a new '{record.name}' in the contact '{record.name}'.\n\n{record}"
 
     def delete_record(self, name: str):
         """Remove a contact from the contacts. <name>"""
