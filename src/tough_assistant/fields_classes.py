@@ -89,7 +89,7 @@ class Email(Field):
         pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]*\.*[com|org|edu|ua|net]{3}$)"
         is_valid = re.search(pattern, email)
         if not is_valid:
-            return ValueError(f"Email '{email}' is not valid.")
+            return None
         return email
     
 
