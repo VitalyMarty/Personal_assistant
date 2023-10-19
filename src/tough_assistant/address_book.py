@@ -51,7 +51,6 @@ class AddressBook(UserDict):
     
     def add_phone_to_record(self, *args) -> str:
         """Add phone to the contact. <name> <phone>"""
-        print('input func', args)
         if not args:
             return f'You must enter name of contact and phone! Try again'
         record, new_args = self.find_record(*args)
@@ -110,7 +109,7 @@ class AddressBook(UserDict):
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
-            return f'You must enter address for adding to the contact {record.name}'
+            return f'You must enter address for editing to the contact {record.name}'
         new_address = ' '.join(new_args)
         if not record.address:
             return f'There is no address in contact {record.name}. You need to add first.'
@@ -118,15 +117,29 @@ class AddressBook(UserDict):
         record.address = new_address
         return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'"
 
-
-
-    def edit_phone_in_record(self, name: str, old_phone, new_phone: str) -> str:
+    def edit_phone_in_record(self, *args) -> str:
         """Edit phone in the contact. <name> <old phone> <new phone>"""
-        record: Record = self.find_record(name)
-        old_phone = Phone(old_phone)
-        new_phone = Phone(new_phone)
-        record.edit_phone(old_phone, new_phone)
-        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name}'"
+        if not args:
+            return f'You must enter name of contact and phone! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not new_args:
+            return f'You must enter phone for editing to the contact {record.name}'
+        old_phone, new_args = record.find_phone(*new_args)
+        if not old_phone:
+            return f'There is no phone in contactwith this phone'
+        if not new_args:
+            return f'You must enter new phone for editing exist phone in the contact {record.name}'
+        new_phone = Phone(' '.join(new_args))
+        if not new_phone.value:
+            return "The new phone number is incorrect."
+        for phone in record.phones:
+            if phone == new_phone:
+                return f'This phone number already exists in record {record.name}'
+        index_old_phone = record.phones.index(old_phone)
+        record.phones[index_old_phone] = new_phone
+        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name}'\n\n{record}"
     
     def edit_email_in_record(self, name: str, new_email: str) -> str:
         """Edit email in the contact. <name> <old email> <new email>"""
@@ -341,7 +354,29 @@ class Record:
             raise ValueError(f'Phone number - {old_phone.value} is not exist in contact: {self.name}') 
         self.phones[edit_phone_i] = new_phone
 
-    def find_phone(self, find_phone: Phone)-> Phone:
+    def find_phone(self, *args)-> Phone:
+        set_variant_of_phone = list(args)
+        part_of_phone = ''
+        for i in args:
+            part_of_phone = (
+                ' '.join([part_of_phone, set_variant_of_phone.pop(0)])
+                .strip()
+                .removeprefix("+")
+                .removeprefix("3")
+                .removeprefix("8")
+                .replace("(", "")
+                .replace(")", "")
+                .replace("-", "")
+                .replace(" ", "")
+            )
+            trial_phone = Phone(part_of_phone)
+            if trial_phone in self.phones:
+                print('Exist')
+                args_without_old_phone = set_variant_of_phone
+                return trial_phone, args_without_old_phone
+        else:
+            return None, None
+        
         for index, phone in enumerate(self.phones):
             if phone == find_phone:
                 return self.phones[index]
