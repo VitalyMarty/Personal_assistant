@@ -126,9 +126,11 @@ class AddressBook(UserDict):
             return f'There is no contact with this name in the book'
         if not new_args:
             return f'You must enter phone for editing to the contact {record.name}'
+        if not record.phones:
+            return f'There is no any phones in contact. You need to add first.'
         old_phone, new_args = record.find_phone(*new_args)
         if not old_phone:
-            return f'There is no phone in contactwith this phone'
+            return f'There is no phone in contact with this phone'
         if not new_args:
             return f'You must enter new phone for editing exist phone in the contact {record.name}'
         new_phone = Phone(' '.join(new_args))
