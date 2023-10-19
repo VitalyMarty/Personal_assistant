@@ -188,7 +188,7 @@ class AddressBook(UserDict):
         else:
             str_result = f'The contacts has next records with search parameters "{search_data}":'
             for ind, record in enumerate(found_contacts, start=1):
-                # Якщо менше ind < 10, то буде 01, 02, ..., 09, якщо більше, то 10, 11, ...
+                # If 'ind' is less than 10, it will be 01, 02, ..., 09; if it's greater, then 10, 11, ...
                 ind = f'0{ind}' if ind <= 9 else str(ind)
                 print(str_result)
                 row = f'\n{ind}.\n{str(record)}'
@@ -219,7 +219,7 @@ class Record:
         self.name = name
 
         
-    # Реалізація класу
+    # Class implementation
     @property
     def name(self):
         return self._name.value
@@ -307,9 +307,9 @@ class Record:
         return f'Record({self.name}, {self.birthday}, {self.address}, {self.email}, {phones_repr})'
     
     
-# Створюємо сховище, де зберігається файл з контактами та нотатками
+# We create a storage where contacts and notes are stored.
 storage_addressbook = Backup(PickleStorage(FILENAME_ADDRESSBOOK))
-# Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
+# We load contacts and notes from files. If the files are missing, we create new ones.
 contacts = AddressBook() if storage_addressbook.load() is None else storage_addressbook.load()
        
 
