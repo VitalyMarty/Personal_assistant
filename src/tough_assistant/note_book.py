@@ -2,7 +2,7 @@ from collections import UserDict
 from fields_classes import Note, Tag
 from datetime import datetime
 
-from backup import Backup, PickleStorage, VERSION
+from backup import Backup, PickleStorage, VERSION, FILENAME_NOTEBOOK
 
 MANY_PARAM = "Too many parameters."
 NOTE_ID = "Enter Note ID."
@@ -280,7 +280,7 @@ class Notebook(UserDict):
 
 
 # Створюємо сховище, де зберігається файл з контактами та нотатками
-storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
+storage_notebook = Backup(PickleStorage(FILENAME_NOTEBOOK))
 
 # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
 notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
