@@ -70,7 +70,7 @@ class AddressBook(UserDict):
     def add_email_to_record(self, *args) -> str:
         """Add email to the contact. <name> <email>"""
         if not args:
-            return f'You must enter name of contact and phone! Try again'
+            return f'You must enter name of contact and email! Try again'
         record, new_args = self.find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
@@ -84,10 +84,22 @@ class AddressBook(UserDict):
         record.email = new_email.value
         return f'Added new email {record.email} to contact {record.name}\n\n{record}'
     
-    def add_birthday_to_record(self, name, birthday: str) -> str:
+    def add_birthday_to_record(self, *args) -> str:
         """Add date of birthday to the contact. <name> <date>"""
-        record: Record = self.find_record(name)
-        record.birthday = birthday
+        if not args:
+            return f'You must enter name of contact and birthday! Try again'
+        record, new_args = self.find_record(*args)
+        print(new_args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not new_args:
+            return f'You must enter birthday for adding to the contact {record.name}'
+        new_birthday = Birthday(' '.join(new_args))
+        if not new_birthday.value:
+            return "The birthday is incorrect."
+        if record.birthday :
+            return f'The birthday already exists in record {record.name}'
+        record.birthday = ' '.join(new_args)    #need str not datetime
         return f'Added new birthday {record.birthday} to contact {record.name}'
     
     def edit_address_in_record(self, name: str, new_address: str) -> str:

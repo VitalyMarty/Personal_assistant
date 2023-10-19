@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from contextlib import suppress
 
 
 class Field:
@@ -62,13 +63,28 @@ class Phone(Field):
 class Birthday(Field):
 
     def normalize(self, birthday: str) -> str:
-        normal_birthday = datetime.strptime(birthday, '%Y-%m-%d').date()
+        normal_birthday = None
+        formats = [
+            '%Y-%m-%d',
+            '%d-%m-%Y',
+            '%Y.%m.%d',
+            '%d.%m.%Y',
+            '%Y %m %d',
+            '%d %m %d'
+        ]
+        for format in formats:
+            try:
+                normal_birthday = datetime.strptime(birthday, format).date()
+                break
+            except Exception as e:
+                pass
+
         return normal_birthday
 
     def validate(self, birthday: str) -> str:
         today = datetime.now().date()
         if birthday > today:
-            raise ValueError(f"Birthday '{birthday}' must be less than current year and date.")
+            return f"Birthday '{birthday}' must be less than current year and date."
         return birthday
     
     def get_next_birthday(self):
