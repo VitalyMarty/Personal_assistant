@@ -115,7 +115,7 @@ class AddressBook(UserDict):
             return f'There is no address in contact {record.name}. You need to add first.'
         old_address = record.address
         record.address = new_address
-        return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'"
+        return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}''\n\n{record}"
 
     def edit_phone_in_record(self, *args) -> str:
         """Edit phone in the contact. <name> <old phone> <new phone>"""
@@ -143,12 +143,23 @@ class AddressBook(UserDict):
         record.phones[index_old_phone] = new_phone
         return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name}'\n\n{record}"
     
-    def edit_email_in_record(self, name: str, new_email: str) -> str:
+    def edit_email_in_record(self, *args) -> str:
         """Edit email in the contact. <name> <old email> <new email>"""
-        record: Record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and email! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not new_args:
+            return f'You must enter email for editing to the contact {record.name}'
+        if not record.email:
+            return f'There is no email in contact {record.name}. You need to add first.'
+        new_email = Email(' '.join(new_args))
+        if not new_email.value:
+            return "The email is incorrect."
         old_email = record.email
-        record.email = new_email
-        return f"The old email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}'"
+        record.email = new_email.value
+        return f"The old email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}''\n\n{record}"
     
     def edit_birthday_in_record(self, name: str, new_birthday: str) -> str:
         """Edit date of birthday in the contact. <name> <old date> <new date>"""
