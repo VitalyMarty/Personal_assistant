@@ -70,18 +70,20 @@ class Birthday(Field):
             '%Y.%m.%d',
             '%d.%m.%Y',
             '%Y %m %d',
-            '%d %m %d'
+            '%d %m %Y'
         ]
         for format in formats:
             try:
                 normal_birthday = datetime.strptime(birthday, format).date()
                 break
-            except Exception as e:
+            except Exception:
                 pass
 
         return normal_birthday
 
     def validate(self, birthday: str) -> str:
+        if not birthday:
+            return None
         today = datetime.now().date()
         if birthday > today:
             return f"Birthday '{birthday}' must be less than current year and date."

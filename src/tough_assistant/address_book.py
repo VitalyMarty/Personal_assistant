@@ -125,7 +125,7 @@ class AddressBook(UserDict):
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
-            return f'You must enter phone for editing to the contact {record.name}'
+            return f'You must enter phone for editing in the contact {record.name}'
         if not record.phones:
             return f'There is no any phones in contact. You need to add first.'
         old_phone, new_args = record.find_phone(*new_args)
@@ -151,7 +151,7 @@ class AddressBook(UserDict):
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
-            return f'You must enter email for editing to the contact {record.name}'
+            return f'You must enter email for editing in the contact {record.name}'
         if not record.email:
             return f'There is no email in contact {record.name}. You need to add first.'
         new_email = Email(' '.join(new_args))
@@ -159,14 +159,25 @@ class AddressBook(UserDict):
             return "The email is incorrect."
         old_email = record.email
         record.email = new_email.value
-        return f"The old email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}''\n\n{record}"
+        return f"The old email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}'\n\n{record}"
     
-    def edit_birthday_in_record(self, name: str, new_birthday: str) -> str:
+    def edit_birthday_in_record(self, *args) -> str:
         """Edit date of birthday in the contact. <name> <old date> <new date>"""
-        record: Record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and birthday! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not new_args:
+            return f'You must enter birthday for editing in the contact {record.name}'
+        if not record.birthday:
+            return f'There is no birthday in contact {record.name}. You need to add first.'
+        new_birthday = Birthday(' '.join(new_args))
+        if not new_birthday.value:
+            return "The new birthday is incorrect."
         old_birthday = record.birthday
-        record.birthday = new_birthday
-        return f"The old birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}'"
+        record.birthday = ' '.join(new_args)
+        return f"The old birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}'\n\n{record}"
     
     def edit_name_in_record(self, name: str, new_name: str) -> str:
         """Edit name in the contact. <name> <new name>"""
