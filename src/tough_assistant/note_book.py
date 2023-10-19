@@ -1,36 +1,14 @@
 from collections import UserDict
-from fields_classes import Field
+from fields_classes import Note, Tag
 from datetime import datetime
-import re
 
 from backup import Backup, PickleStorage, VERSION
 
-# TODO move class in fields_classes.py in release
-class Note(Field):
-
-    @Field.value.setter
-    def value(self, value):
-        if re.match(r"^(.{3,250})$", value):
-            self._value = value
-        else:
-            print("Note must be in range of 3-250 symbols.")
-
-
-# TODO move class in fields_classes.py in release
-# Class for Tags. Only for check correct input
-# only words accepted due to technical assignment
-class Tag(Field):
-    # return __repr__ as string
-    def __repr__(self) -> str:
-        return self.__str__()
-
-    # check input
-    @Field.value.setter
-    def value(self, value) -> None:
-        if re.match(r"^[A-Za-z]{3,10}$", value):
-            self._value = value
-        else:
-            print("Incorrect Tag format. Only 3-10 letters, without digits, spaces and special symbols accepted.")
+MANY_PARAM = "Too many parameters."
+NOTE_ID = "Enter Note ID."
+ENTER_NOTE_ID = "You must enter Note ID"
+ID_WITH_DIGITS = "Enter Note ID with digits"
+NO_NOTES = "There are no Notes. Try to add it first."
 
 
 class NoteRecord:
@@ -64,6 +42,13 @@ class NoteRecord:
         self.tags = [Tag(itm) for itm in sorting_list]
         return "Tags is sorted."
 
+    # clear tags
+    def clear_tags(self) -> str:
+        if len(self.tags) < 1:
+            return "There are no tags. Nothing to clear."
+        self.tags.clear()
+        return "Tag list is cleared."
+
 
 class Notebook(UserDict):
     # using for calling iter with parameters
@@ -76,11 +61,10 @@ class Notebook(UserDict):
     # using __call__ for show all.
     def __call__(self) -> str:
         if not self.counter:
-            return "There are no notes."
+            return NO_NOTES
         for i, key in enumerate(self.data.keys()):
             print(f"Note #{i + 1} : {self.data[key]}" if not self.data[key].tags
                   else f"Note #{i + 1} : {self.data[key]}\n\tTags: {self.data[key].tags}")
-
         return f"End of Notes. {self.counter} notes were shown." if self.counter > 1 \
             else f"End of Notes. {self.counter} note was shown."
 
@@ -97,20 +81,31 @@ class Notebook(UserDict):
         """Show all Notes in Notebook."""
         return self.__call__()
 
-    # def add_note(self, record: NoteRecord) -> str:
     def add_note(self, *args) -> str:
         """Add Note."""
         # set note number
+        if not args:
+            return "Can't add blank Note"
         self.counter += 1
         self.data[self.counter] = NoteRecord(' '.join(map(str, args)))
         return f"Note #{self.counter} is successfully added"
 
     # remove note
-    def remove_note(self, id: int) -> str:
+    def remove_note(self, *args) -> str:
         """Remove Note."""
+        # check correct input
+        if not len(args):
+            return ENTER_NOTE_ID
+        elif not args[0].isdigit():
+            return ID_WITH_DIGITS
+        elif len(args) > 1:
+            return MANY_PARAM + " " + NOTE_ID
+
+        id = int(args[0])
         if id <= 0 or id > self.counter:
-            return f"Incorrect note number. Note number must be in range 1 to {self.counter}" if self.counter \
+            return f"Incorrect Note ID. Note number must be in range 1 to {self.counter}" if self.counter \
                 else f"You have {self.counter} notes. Nothing to delete."
+
         # del note record
         self.data.pop(id)
         # decrease notes counter
@@ -121,41 +116,90 @@ class Notebook(UserDict):
         return f"Note with id {id} is successfully deleted."
 
     # edit notes with changing edit time
-    # def edit_note(self, id: int, text: str) -> str:
-    def edit_note(self, id: int, *args) -> str:
+    def edit_note(self, *args) -> str:
         """Edit Note."""
 
         # if there are no notes
         if not self.counter:
-            return "There are no Notes. Try to add it first."
+            return NO_NOTES
 
+        # check correct input
+        if not len(args):
+            return ENTER_NOTE_ID + " " + "and new text."
+        elif not args[0].isdigit():
+            return ID_WITH_DIGITS
+        elif len(args) < 2:
+            return ENTER_NOTE_ID + " " + "and new text."
+
+        id = int(args[0])
         # if select Note id out from range
         if id not in range(1, self.counter + 1):
             return f"There are {self.counter} Notes. Enter valid id."
 
-        self.data[id].note = ' '.join(map(str, args))
-
-        # TODO change to datetime.now() after testing !
-
-        self.data[id].edit_date = datetime(2022, 7, 21)
+        self.data[id].note = ' '.join(map(str, args[1:]))
+        self.data[id].edit_date = datetime.now()
         return f"Note with id {id} is successfully changed."
 
-    # TODO find note
-    def find_note(self, keyword: str) -> str:
+    def find_note(self, *args) -> str:
         """Find Note."""
+        # check correct input
+        if not len(args):
+            return "Enter search keyword."
+        elif len(args) > 1:
+            return MANY_PARAM
 
-        return "Return from class Notebook function find_note. Will be soon."
+        search_result = set()
 
-    # TODO find note by tag
-    def find_by_tag(self, tag: str) -> str:
-        """find note by tag"""
+        # collect unique results
+        for key in self.data:
+            if str(self.data[key].note).lower().find(str(*args[:2]).lower()) != -1:
+                search_result.add(key)
 
-        return "Return from class Notebook function find_by_tag. Will be soon."
+        # show results
+        for key in self.data.keys():
+            if key in search_result:
+                print(f"Note #{key} : {self.data[key]}" if not self.data[key].tags
+                      else f"Note #{key} : {self.data[key]}\n\tTags: {self.data[key].tags}")
+
+        return f"End of search. {len(search_result)} results were found." if len(search_result) > 1 \
+            else f"End of search. {len(search_result)} results was found."
+
+    def find_by_tag(self, *args) -> str:
+        """Find note by tag"""
+
+        # check correct input
+        if not len(args):
+            return "Enter search keyword."
+        elif len(args) > 1:
+            return MANY_PARAM
+
+        keyword = str(*args[:2]).lower()
+        search_result = set()
+
+        print(str(*args[:2]).lower())
+
+        # collect unique results
+        for key in self.data:
+            for item in self.data[key].tags:
+                if keyword in item.value:
+                    search_result.add(key)
+
+        if len(search_result):
+            print(f"Searching results for tag keyword '{keyword}'")
+
+        # show results
+        for key in self.data.keys():
+            if key in search_result:
+                print(f"Note #{key} : {self.data[key]}" if not self.data[key].tags
+                      else f"Note #{key} : {self.data[key]}\n\tTags: {self.data[key].tags}")
+
+        return f"End of search. {len(search_result)} results were found." if len(search_result) > 1 \
+            else f"End of search. {len(search_result)} results was found."
 
     def sort_by_date(self) -> str:
         """Sort Notes by create/edit date."""
         if not self.counter:
-            return "There are no Notes. Try to add it first."
+            return NO_NOTES
         if self.counter == 1:
             print(f"Note #{self.counter} : {self.data[self.counter]}")
             return f"End of Notes. {self.counter} note was shown."
@@ -164,19 +208,43 @@ class Notebook(UserDict):
             sorted_dict[self.data[key].edit_date] = key
         sorted_dict = dict(sorted(sorted_dict.items()))
         for key in sorted_dict.keys():
-            print(
-                f"Change date: {key:%d-%m-%Y %H:%M:%S}\t Note id{sorted_dict[key]}\t Note: {self.data[sorted_dict[key]]}")
+            print(f"Change date: {key:%d-%m-%Y %H:%M:%S}\t "
+                  f"Note id{sorted_dict[key]}\t Note: {self.data[sorted_dict[key]]}")
         # clear temp variables to prevent problems
         sorted_dict.clear()
         return f"End of Notes. {self.counter} Notes were sorted by create/edit time."
 
-    def add_tag(self, id: int, tag: str) -> str:
+    def add_tag(self, *args) -> str:
         """Add tag to the Note."""
-        msg = self.data[id].add_tag_record(tag)
+
+        # check correct input
+        if not len(args):
+            return "You must enter Note ID and tag."
+        elif not args[0].isdigit():
+            return ID_WITH_DIGITS
+
+        id = int(args[0])
+        if id not in range(1, self.counter + 1):
+            return f"There are {self.counter} Notes. Enter valid id."
+
+        msg = self.data[id].add_tag_record(' '.join(map(str, args[1:])))
         return msg
 
-    def sort_tag(self, id: int) -> str:
+    def sort_tag(self, *args) -> str:
         """Sort tags in Note."""
+
+        # check correct input
+        if not len(args):
+            return ENTER_NOTE_ID
+        elif len(args) > 1:
+            return MANY_PARAM + " " + NOTE_ID
+        elif not args[0].isdigit():
+            return ID_WITH_DIGITS
+
+        id = int(args[0])
+        if id not in range(1, self.counter + 1):
+            return f"There are {self.counter} Notes. Enter valid id."
+
         msg = self.data[id].sort_tags()
         print(f"Note id {id}.\tTags: {', '.join(str(itm) for itm in self.data[id].tags)} " if len(
             self.data[id].tags) > 0 else "")
@@ -189,63 +257,34 @@ class Notebook(UserDict):
             for item in self.data[key].tags:
                 unique_tags.add(item.value)
         print(f"Unique tags in Notebook: {', '.join(sorted(unique_tags))}" if unique_tags \
-            else "There are no tags in Notebook. Try to add it first.")
+                  else "There are no tags in Notebook. Try to add it first.")
         return ""
+
+    def clear_tags(self, *args) -> str:
+        """Clear tags in Note"""
+
+        # check correct input
+        if not len(args):
+            return ENTER_NOTE_ID
+        elif not args[0].isdigit():
+            return ID_WITH_DIGITS
+        elif len(args) > 1:
+            return MANY_PARAM + " " + NOTE_ID
+
+        id = int(args[0])
+        if id not in range(1, self.counter + 1):
+            return f"There are {self.counter} Notes. Enter valid Id."
+
+        msg = self.data[id].clear_tags()
+        return msg
+
 
 # Створюємо сховище, де зберігається файл з контактами та нотатками
 storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
-
 
 # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
 notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
 
 
-
-
-
 if __name__ == "__main__":
-
-    # TODO remove testing part in release
-
-    print("Using for testing")
-
-    book = Notebook()
-    print(book.counter)
-    print(book.add_note("obtain", "a.", "string", "from.", "the", "attributes"))
-    print(book.counter)
-    print(book.add_note("Lorem", "Ipsum"))
-    print(book.counter)
-    print(book.add_note("Why", "do", "we", "use", "it", "?"))
-    print(book.counter)
-
-    book()
-
-    book.show_all_tags()
-
-    print(book.add_tag(1, "fish"))
-    print(book.add_tag(1, "word 1 fdsfds"))
-    print(book.add_tag(1, "word"))
-    print(book.add_tag(1, "word"))
-    print(book.add_tag(2, "word"))
-    print(book.add_tag(1, "auto"))
-    print(book.add_tag(2, "some"))
-
-    print(book())
-
-    print(book.edit_note(3, "new", "text", "for", "test"))
-
-    print(book.sort_by_date())
-
-    book()
-
-    print(book.sort_tag(1))
-
-    book()
-
-    # print(book.remove_note(2))
-
-    book.show_all()
-
-    print(book.add_tag(1, "word 1 fdsfds"))
-
-    book.show_all_tags()
+    print("Module Notebook")
