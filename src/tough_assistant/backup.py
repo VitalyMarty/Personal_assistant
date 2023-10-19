@@ -1,6 +1,11 @@
 import pickle
+from contextlib import suppress
+
 
 VERSION = 'v.0.0.1'
+FILENAME_ADDRESSBOOK = 'test_addressbook.pickle'
+FILENAME_NOTEBOOK = 'test_notebook.pickle'
+
 
 class Storage:
     def save(self):
@@ -15,18 +20,16 @@ class PickleStorage(Storage):
     def __init__(self, filename: str) -> str:
         self.filename = filename
 
-    def save_object(self, object):
+    def save(self, object):
         with open(self.filename, 'wb') as fh:
             pickle.dump(object, fh)
     
-    def load_object(self) -> object:
-        try:
+    def load(self) -> object:
+        with suppress(FileNotFoundError):
             with open(self.filename, 'rb') as fh:
                 object = pickle.load(fh)
-            return object
-        except:
-            pass
-        
+                return object
+
 
 class Backup(Storage):
 
@@ -34,10 +37,10 @@ class Backup(Storage):
         self.storage = storage
 
     def save(self, object):
-        return self.storage.save_object(object)
+        return self.storage.save(object)
     
     def load(self):
-        return self.storage.load_object()
+        return self.storage.load()
        
 
 

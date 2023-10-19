@@ -3,7 +3,7 @@ from fields_classes import Field
 from datetime import datetime
 import re
 
-from backup import Backup, PickleStorage, VERSION
+from backup import Backup, PickleStorage, VERSION, FILENAME_NOTEBOOK
 
 # TODO move class in fields_classes.py in release
 class Note(Field):
@@ -193,7 +193,7 @@ class Notebook(UserDict):
         return ""
 
 # Створюємо сховище, де зберігається файл з контактами та нотатками
-storage_notebook = Backup(PickleStorage('test_notebook.pickle'))
+storage_notebook = Backup(PickleStorage(FILENAME_NOTEBOOK))
 
 
 # Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
