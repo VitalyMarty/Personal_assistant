@@ -39,6 +39,8 @@ class Phone(Field):
     def normalize(self, value: str) -> str:
         new_value = (
             value.removeprefix("+")
+                .removeprefix("3")
+                .removeprefix("8")
                 .replace("(", "")
                 .replace(")", "")
                 .replace("-", "")
@@ -48,9 +50,9 @@ class Phone(Field):
     
     def validate(self, value: str) -> str:
         if len(value) < 10 or len(value) > 12:
-                raise ValueError(f"Phone '{value}' must contains 10 symbols.")
+                return None
         if not value.isnumeric():
-                raise ValueError(f"Phone '{value}' is wrong.")
+                return None
         return value
     
     def __eq__(self, phone):
