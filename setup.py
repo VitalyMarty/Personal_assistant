@@ -5,7 +5,7 @@ setup(
     version="0.0.1",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    author="Vitaly Martynenko, Savenko Vitalii, Andrii Kononov, Symbirtsev Serhii, Bohdan Turkot",
+    author="Vitaly Martynenko, Savenko Vitalii, Andrii Kononov, Symbirtsev Serhii, Bogdan Turkot",
     description="This Bot-Assistant help you manage you adressbook and notebook, also can sort files and folder",
     entry_points={'console_scripts': ['assistant = tough_assistant.main:main']},
     install_requires=[
