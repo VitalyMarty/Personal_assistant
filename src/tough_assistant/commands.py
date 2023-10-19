@@ -63,5 +63,4 @@ command_dict ={
     'clear tags': notes.clear_tags,
     'sort dir': sort_and_rename_files,
     'joke': main_generator,
-    'make file': None
 }
