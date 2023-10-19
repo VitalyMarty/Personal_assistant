@@ -117,18 +117,7 @@ class AddressBook(UserDict):
         record: Record = self.find_record(name)
         phone = Phone(phone)
         return record.remove_phone(phone)
-    
-    def iterator(self, chunk_size=10):
-        record_names = list(self.data.keys())
-        num_records = len(record_names)
-        current_index = 0
-
-        while current_index < num_records:
-            end_index = current_index + chunk_size
-            records_chunk = [self.data[record_name] for record_name in record_names[current_index:end_index]]
-            yield records_chunk
-            current_index = end_index
-            
+                
     def _collect_recods_by_birthday(self, target_days: str):
         dict_contacts = {}
         for record in self.data.values():
@@ -148,7 +137,6 @@ class AddressBook(UserDict):
             matching_contacts = '\n'.join([matching_contacts, row])
             
         return matching_contacts
-
 
     def _search_contacts_by_name(self, name: str):
         found_contacts_by_name = []
@@ -186,7 +174,6 @@ class AddressBook(UserDict):
                 found_contacts_by_birthday.append(record)
         return found_contacts_by_birthday
 
-    
     def find_in_records(self, search_data: str):
         """Find contact based on available information"""
         found_contacts = []
@@ -220,6 +207,7 @@ class AddressBook(UserDict):
             message = '\n'.join([message, f'{count}.\n{self.data[key_record]}'])
 
         return message
+
 
 class Record:
     def __init__(self, name:str):
@@ -314,7 +302,6 @@ class Record:
         phones = '; '.join([phone.value for phone in self.phones])
         return f'Contact: {self.name}\nBirthday: {self.birthday}\nAddress: {self.address}\nEmail: {self.email}\nPhones: {phones}\n'
 
-    
     def __repr__(self) -> str:
         phones_repr = ', '.join([phone.value for phone in self.phones])
         return f'Record({self.name}, {self.birthday}, {self.address}, {self.email}, {phones_repr})'
