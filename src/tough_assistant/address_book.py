@@ -43,8 +43,9 @@ class AddressBook(UserDict):
             return f'There is no contact with this name in the book'
         if not new_args:
             return f'You must enter address for adding to the contact {record.name}'
-        
         address = ' '.join(new_args)
+        if record.address :
+            return f'The email already exists in record {record.name}'
         record.address = address
         return f'Added new address {record.address} to contact {record.name}.\n\n{record}'
     
@@ -89,7 +90,6 @@ class AddressBook(UserDict):
         if not args:
             return f'You must enter name of contact and birthday! Try again'
         record, new_args = self.find_record(*args)
-        print(new_args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -102,12 +102,23 @@ class AddressBook(UserDict):
         record.birthday = ' '.join(new_args)    #need str not datetime
         return f'Added new birthday {record.birthday} to contact {record.name}'
     
-    def edit_address_in_record(self, name: str, new_address: str) -> str:
+    def edit_address_in_record(self, *args) -> str:
         """Edit address in the contact. <name> <old address> <new address>"""
-        record: Record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and address! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not new_args:
+            return f'You must enter address for adding to the contact {record.name}'
+        new_address = ' '.join(new_args)
+        if not record.address:
+            return f'There is no address in contact {record.name}. You need to add first.'
         old_address = record.address
         record.address = new_address
         return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'"
+
+
 
     def edit_phone_in_record(self, name: str, old_phone, new_phone: str) -> str:
         """Edit phone in the contact. <name> <old phone> <new phone>"""
