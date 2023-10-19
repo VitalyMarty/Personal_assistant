@@ -243,11 +243,22 @@ class AddressBook(UserDict):
         record.address = None
         return f'Address {old_address} was deleted from contact {record.name}.\n\n{record}'
     
-    def delete_phone_from_record(self, name, phone:str):
+    def delete_phone_from_record(self, *args):
         """Remove a phone from the contact. <name> <phone> """
-        record: Record = self.find_record(name)
-        phone = Phone(phone)
-        return record.remove_phone(phone)
+        if not args:
+            return f'You must enter name of contact! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        if not record.phones:
+            return f'There is no phones in contact {record.name}. You need to add first.'
+        if not new_args:
+            return f'You must enter phone that need to delete from the contact {record.name}'
+        old_phone, _ = record.find_phone(*new_args)
+        if not old_phone:
+            return f'There is no phone in contact with this phone'
+        record.remove_phone(old_phone)
+        return f'Phone {old_phone.value} was deleted from contact {record.name}.\n\n{record}'
                 
     def _collect_recods_by_birthday(self, target_days: str):
         dict_contacts = {}
@@ -439,8 +450,7 @@ class Record:
         for index, phone in enumerate(self.phones):
             if phone == remove_phone:
                 del self.phones[index]
-                return f'Phone {phone.value} was deleted from contact {self.name}'
-        return ValueError(f'Phone number - {remove_phone.value} is not exist in contact: {self.name}') 
+                break
 
     def check_birthday_by_date(self, target_days):
         if self._birthday is None:
