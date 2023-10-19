@@ -103,14 +103,14 @@ class AddressBook(UserDict):
         record = self.find_record(name)
         old_birthday = record.birthday
         record.birthday = None
-        return f'Email {old_birthday} was deleted from contact {record.name}'
+        return f'Birthday {old_birthday} was deleted from contact {record.name}'
 
     def delete_address_from_record(self, name):
         """Remove an address from the contact. <name> <address>"""
         record = self.find_record(name)
         old_address = record.address
         record.address = None
-        return f'Email {old_address} was deleted from contact {record.name}'
+        return f'Address {old_address} was deleted from contact {record.name}'
     
     def delete_phone_from_record(self, name, phone:str):
         """Remove a phone from the contact. <name> <phone> """
@@ -248,7 +248,10 @@ class Record:
     
     @address.setter
     def address(self, address: str):
-        self._address = Address(address)
+        if address is None:
+            self._address = None
+        else:
+            self._address = Address(address)
 
     @property
     def email(self):
@@ -258,7 +261,10 @@ class Record:
     
     @email.setter
     def email(self, email: str):
-        self._email = Email(email)
+        if email is None:
+            self._email = None
+        else:
+            self._email = Email(email)
 
     @property
     def birthday(self):
@@ -268,7 +274,10 @@ class Record:
     
     @birthday.setter
     def birthday(self, birthday: str):
-        self._birthday = Birthday(birthday)
+        if birthday is None:
+            self._birthday = None
+        else:        
+            self._birthday = Birthday(birthday)
 
     def edit_phone(self, old_phone: Phone, new_phone: Phone)-> None:
         for i, phone in enumerate(self.phones):
