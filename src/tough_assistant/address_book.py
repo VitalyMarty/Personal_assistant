@@ -192,9 +192,13 @@ class AddressBook(UserDict):
         self.data[record.name] = self.data.pop(old_name)
         return f"The old name '{old_name}' was changed to a new '{record.name}' in the contact '{record.name}'.\n\n{record}"
 
-    def delete_record(self, name: str):
+    def delete_record(self, *args):
         """Remove a contact from the contacts. <name>"""
-        record = self.find_record(name)
+        if not args:
+            return f'You must enter name of contact and birthday! Try again'
+        record, new_args = self.find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
         del self.data[record.name]
         return f'Contact {record.name} was deleted from contacts'
     
