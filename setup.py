@@ -11,4 +11,5 @@ setup(
     install_requires=[
         'prompt_toolkit'
         ],
+    python_requires='>3.5.2'
 )
