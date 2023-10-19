@@ -279,10 +279,10 @@ class Notebook(UserDict):
         return msg
 
 
-# Створюємо сховище, де зберігається файл з контактами та нотатками
+# Creating a storage where contacts and notes are stored.
 storage_notebook = Backup(PickleStorage(FILENAME_NOTEBOOK))
 
-# Завантажуємо контакти та нотатки з файлів. Якщо файли відсутні створюємо нові.
+# Loading contacts and notes from files. If the files are absent, we create new ones.
 notes = Notebook() if storage_notebook.load() is None else storage_notebook.load()
 
 

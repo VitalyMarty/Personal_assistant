@@ -60,7 +60,7 @@ class Phone(Field):
 class Birthday(Field):
 
     def normalize(self, birthday: str) -> str:
-        normal_birthday = datetime.strptime(birthday, '%Y-%m-%d').date()                    # TODO Якщо дата не в правильному форматі викличеться ValueError. Її треба якось обробити
+        normal_birthday = datetime.strptime(birthday, '%Y-%m-%d').date()
         return normal_birthday
 
     def validate(self, birthday: str) -> str:
@@ -76,7 +76,6 @@ class Birthday(Field):
             next_birthday - self._value.replace(year = today.year+1)
         return abs(next_birthday - today).days    
             
-
 
 class Address(Field):
     pass
@@ -122,26 +121,6 @@ class Tag(Field):
         else:
             print("Incorrect Tag format. Only 3-10 letters, without digits, spaces and special symbols accepted.")
 
-                                                                                            
-                                                                                            #TODO Видалити вкінці
-# Приклад використання полів.
-if __name__ == '__main__':
-    field_name = Name('taras shevchenko')
-    print(field_name)                           # Taras Shevchenko
 
-    field_phone = Phone('+38(063)-500-12-40')   # 380635001240
-    print(field_phone)
-
-    field_birthday = Birthday('1990-05-12')
-    print(field_birthday)                       # 1990-05-12
-
-    field_date = Date(datetime.now())           
-    print(field_date)                           # 2023-10-16 09:35:22.222808
-
-    field_email_valid = Email('test.email@gmail.com')  
-    print(field_email_valid)                          # test.email@gmail.com 
-
-    field_email_not_valid = Email('test:!@email@gmail.com')  
-    print(field_email_not_valid)                          # Email 'test:!@email@gmail.com' is not valid.
-    
-    
+if __name__ == "__main__":
+    print("Module Fields")

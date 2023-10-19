@@ -35,7 +35,6 @@ def handler(command):
     return command_dict.get(command, break_func)
 
 
-
 def main():
 
     print('{:<15} {}\n{:<15} {}\n{:<15} {}\n'.format('Tough Assistant', VERSION, 'AddressBook', contacts.version, 'NoteBook', notes.version))
@@ -45,27 +44,25 @@ def main():
     try:
         while True:
             
-            # Запит у користувача, що зробити
+            # User request for action
             user_input = prompt("\nType 'help' to view available commands. Type 'exit' to exit.\n>>> ", completer=completer)
 
-            # Обробка команди від користувача
+            # Processing user command
             result = parse_input(user_input)
 
-            #TODO Прибрати коментар та включити функцію очищення екрану перед виведенням іншого результату
-            # os.system('cls')
-            # Вивід результату обробки команди
+            os.system('cls')
+            # Displaying the result of command processing
             print(result)
 
-            # Умова завершення роботи. Користувач повинен ввести команду: close | exit | good bye
+            # Termination condition. The user should enter a command: close | exit | good bye
             if result == 'Good Bye!':
                 break
     finally:
-        # При завершенні роботи зберігаємо contacts та notes
+        # Upon completion, we save the contacts and notes.
         storage_addressbook.save(contacts)
         storage_notebook.save(notes)
         print(f'Contacts saved to file: {storage_addressbook.storage.filename}')
         print(f'Notes saved to file: {storage_addressbook.storage.filename}')
-
 
 
 

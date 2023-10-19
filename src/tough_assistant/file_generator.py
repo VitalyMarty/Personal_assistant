@@ -3,10 +3,10 @@ from random import randint, choice, choices
 import shutil
 
 
-MAX_LEN_NAME = 12           # Максимальна довжина назви файлу або папки
-MAX_FOLDERS_DEEP = 2        # Максимальна глибина вкладень в папках
-MAX_RANDOM_FOLDERS = 2      # Максимальна кількість папок
-MAX_RANDOM_FILES = 10        # Максимальна кількість файлів
+MAX_LEN_NAME = 12           # Maximum filename or foldername length
+MAX_FOLDERS_DEEP = 2        # Maximum depth of attachments in folders
+MAX_RANDOM_FOLDERS = 2      # Maximum number of folders
+MAX_RANDOM_FILES = 10       # Maximum number of files
 
 
 def add_folder(path, name=None):
