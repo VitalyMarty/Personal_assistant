@@ -41,6 +41,9 @@ def remove_empty_folders(folder_path):
                 print(f"Deleted empty folder: {folder_path}")
 
 def sort_and_rename_files(folder_path):
+    if not folder_path:
+        return f'You need enter a folder where will be generate random files. <folder>'
+
     for root, dirs, files in os.walk(folder_path, topdown=True):
         for file in files:
             source_file = os.path.join(root, file)
