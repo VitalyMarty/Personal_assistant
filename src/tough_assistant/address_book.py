@@ -54,7 +54,7 @@ class AddressBook(UserDict):
             return f'You must enter address for adding to the contact {record.name}'
         address = ' '.join(new_args)
         if record.address :
-            return f'The email already exists in record {record.name}'
+            return f'The address already exists in record {record.name}'
         record.address = address
         return f'Added new address {record.address} to contact {record.name}.\n\n{record}'
     
@@ -108,7 +108,7 @@ class AddressBook(UserDict):
         if record.birthday :
             return f'The birthday already exists in record {record.name}'
         record.birthday = ' '.join(new_args)    #need str not datetime
-        return f'Added new birthday {record.birthday} to contact {record.name}'
+        return f'Added new birthday {record.birthday} to contact {record.name}.\n\n{record}'
     
     def edit_address_in_record(self, *args) -> str:
         """Edit address in the contact. <name> <old address> <new address>"""

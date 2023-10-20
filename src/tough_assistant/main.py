@@ -50,9 +50,9 @@ def main():
             # Processing user command
             result = parse_input(user_input)
 
-            os.system('cls')
+            # os.system('cls')
             # Displaying the result of command processing
-            print(result)
+            print(f'------\n{result}\n------\n')
 
             # Termination condition. The user should enter a command: close | exit | good bye
             if result == 'Good Bye!':
