@@ -19,7 +19,6 @@ def parse_input(user_input: str) -> str:
             new_input = key
             data = user_input[len(new_input):].split()
             break
-    print('parcer', data)
     if data:
         return handler(new_input)(*data)
     return handler(new_input)()

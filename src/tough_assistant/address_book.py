@@ -15,7 +15,6 @@ class AddressBook(UserDict):
         if not args:
             return f'You must enter name of contact! Try again'
         name = ' '.join(args)
-        # print(name)
         record = Record(name)
         if record.name in self.data:
             return f"The contact with name {record.name} already exists in book"
@@ -272,7 +271,7 @@ class AddressBook(UserDict):
         """Display a list of contacts whose birthday is a specified number of days from the current date """
         dict_contacts = contacts._collect_recods_by_birthday(days)
         if not dict_contacts:
-            return f'Contacts has not birthdays within {days} days in contacts:'
+            return f'Contacts has not birthdays within {days} days in contacts:\n'
         matching_contacts = f'Contacts has next birthdays within {days} days in contacts:'
         for name, through_days in dict_contacts.items():
             row = f'{name} - {through_days} days'
@@ -325,6 +324,8 @@ class AddressBook(UserDict):
         found_contacts.extend(self._search_contacts_by_address(search_data))
         found_contacts.extend(self._search_contacts_by_birthday(search_data))
 
+        found_contacts = set(found_contacts)
+
         if not found_contacts:
             return f'Not find contacts with search parameters "{search_data}"'
         else:
@@ -332,11 +333,8 @@ class AddressBook(UserDict):
             for ind, record in enumerate(found_contacts, start=1):
                 # If 'ind' is less than 10, it will be 01, 02, ..., 09; if it's greater, then 10, 11, ...
                 ind = f'0{ind}' if ind <= 9 else str(ind)
-                print(str_result)
                 row = f'\n{ind}.\n{str(record)}'
-                print(row)
                 str_result = ''.join([str_result, row])  
-            print(str_result)
 
         return str_result
 
@@ -435,7 +433,6 @@ class Record:
             )
             trial_phone = Phone(part_of_phone)
             if trial_phone in self.phones:
-                print('Exist')
                 args_without_old_phone = set_variant_of_phone
                 return trial_phone, args_without_old_phone
         else:
