@@ -1,6 +1,6 @@
 import os
 
-from address_book import storage_addressbook, contacts, VERSION
+from .address_book import storage_addressbook, contacts, VERSION
 from note_book import storage_notebook, notes
 from commands import command_dict
 from decorators import input_error
@@ -50,7 +50,7 @@ def main():
             # Processing user command
             result = parse_input(user_input)
 
-            os.system('cls')
+            # os.system('cls')
             # Displaying the result of command processing
             print(f'{result}\n------\n')
             # Termination condition. The user should enter a command: close | exit | good bye
