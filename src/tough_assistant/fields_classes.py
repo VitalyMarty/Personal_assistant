@@ -94,7 +94,7 @@ class Birthday(Field):
         next_birthday = self._value.replace(year=today.year)
         if next_birthday < today:
             next_birthday - self._value.replace(year = today.year+1)
-        return abs(next_birthday - today).days    
+        return (next_birthday - today).days    
             
 
 class Address(Field):
@@ -104,7 +104,7 @@ class Address(Field):
 class Email(Field):
     
     def validate(self, email: str) -> str:
-        pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]*\.*[com|org|edu|ua|net]{3}$)"
+        pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]*\.*[com|org|edu|ua|net]{2}$)"
         is_valid = re.search(pattern, email)
         if not is_valid:
             return None

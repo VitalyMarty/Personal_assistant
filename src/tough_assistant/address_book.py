@@ -191,7 +191,7 @@ class AddressBook(UserDict):
             return "The new birthday is incorrect."
         old_birthday = record.birthday
         record.birthday = ' '.join(new_args)
-        return f"The birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}.'\n{record}"
+        return f"The birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}'.\n{record}"
     
     def edit_name_in_record(self, *args) -> str:
         """Edit name in the contact. <name> <new name>"""
@@ -476,7 +476,7 @@ class Record:
         if self._birthday is None:
             return None, None
         days = self._birthday.get_next_birthday()
-        if days <= int(target_days):
+        if days <= int(target_days) and days >= 0:
             return self.name, days
         else:
             return None, None
