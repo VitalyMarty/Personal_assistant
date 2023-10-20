@@ -1,7 +1,7 @@
-from .address_book import contacts
-from .note_book import notes
-from .file_generator import main_generator
-from .file_sorter import sort_and_rename_files
+from address_book import contacts
+from note_book import notes
+from file_generator import main_generator
+from file_sorter import sort_and_rename_files
 
 
 def get_help():
