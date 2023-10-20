@@ -1,7 +1,7 @@
-from backup import Backup, PickleStorage, VERSION, FILENAME_ADDRESSBOOK
+from tough_assistant.backup import Backup, PickleStorage, VERSION, FILENAME_ADDRESSBOOK
 
 from collections import UserDict
-from fields_classes import Address, Birthday, Email, Name, Phone  
+from tough_assistant.fields_classes import Address, Birthday, Email, Name, Phone  
 
 
 class AddressBook(UserDict):

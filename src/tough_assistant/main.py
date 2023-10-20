@@ -1,9 +1,9 @@
 import os
 
-from address_book import storage_addressbook, contacts, VERSION
-from note_book import storage_notebook, notes
-from commands import command_dict
-from decorators import input_error
+from tough_assistant.address_book import storage_addressbook, contacts, VERSION
+from tough_assistant.note_book import storage_notebook, notes
+from tough_assistant.commands import command_dict
+from tough_assistant.decorators import input_error
 
 
 from prompt_toolkit import prompt

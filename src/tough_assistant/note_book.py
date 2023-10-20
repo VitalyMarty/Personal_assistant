@@ -1,8 +1,8 @@
 from collections import UserDict
-from fields_classes import Note, Tag
+from tough_assistant.fields_classes import Note, Tag
 from datetime import datetime
 
-from backup import Backup, PickleStorage, VERSION, FILENAME_NOTEBOOK
+from tough_assistant.backup import Backup, PickleStorage, VERSION, FILENAME_NOTEBOOK
 
 MANY_PARAM = "Too many parameters."
 NOTE_ID = "Enter Note ID."
