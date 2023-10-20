@@ -52,7 +52,6 @@ def main():
 
             # os.system('cls')
             # Displaying the result of command processing
-            # print(f'------\n{result}\n------\n')
             print(f'{result}\n------\n')
             # Termination condition. The user should enter a command: close | exit | good bye
             if result == 'Good Bye!':
