@@ -458,13 +458,6 @@ class Record:
             if trial_phone in self.phones:
                 args_without_old_phone = set_variant_of_phone
                 return trial_phone, args_without_old_phone
-        else:
-            return None, None
-        
-        for index, phone in enumerate(self.phones):
-            if phone == find_phone:
-                return self.phones[index]
-        return ValueError(f'Phone number - {find_phone.value} is not exist in contact: {self.name}') 
              
     def remove_phone(self, remove_phone)-> None:
         for index, phone in enumerate(self.phones):
