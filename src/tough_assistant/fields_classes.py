@@ -86,7 +86,7 @@ class Birthday(Field):
             return None
         today = datetime.now().date()
         if birthday > today:
-            return f"Birthday '{birthday}' must be less than current year and date."
+            return None
         return birthday
     
     def get_next_birthday(self):
