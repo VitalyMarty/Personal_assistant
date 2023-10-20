@@ -25,6 +25,7 @@ class AddressBook(UserDict):
         set_variant_of_name = list(args)
         name = ''
         args_without_name = ''
+        record = None
         for i in args:
             name = ' '.join([name, set_variant_of_name.pop(0)]).strip().title()
             search_record: Record = self.data.get(name, None)
