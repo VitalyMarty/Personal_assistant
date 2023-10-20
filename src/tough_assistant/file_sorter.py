@@ -42,7 +42,7 @@ def remove_empty_folders(folder_path):
 
 def sort_and_rename_files(folder_path):
     if not path:
-        return f'You need enter a folder where will be generate random files'
+        return f'You need enter a folder where will be generate random files. <folder>'
 
     for root, dirs, files in os.walk(folder_path, topdown=True):
         for file in files:
