@@ -21,8 +21,7 @@ class AddressBook(UserDict):
         self.data[record.name] = record
         return f'Added new contact {record.name} to contacts:\n\n{record}'
     
-    def find_record(self, *args):
-        """Find contact by name. <name>"""
+    def _find_record(self, *args):
         set_variant_of_name = list(args)
         name = ''
         for i in args:
@@ -33,12 +32,22 @@ class AddressBook(UserDict):
                 return record, args_without_name
         else:
             return None, None
+        
+    def find_contact(self, *args):
+        """Find contact by name. <name>"""
+        if not args:
+            return f'You must enter name of contact and address! Try again'
+        record, new_args = self._find_record(*args)
+        if not record:
+            return f'There is no contact with this name in the book'
+        return f'Found contact next contact {record.name} in book.\n\n{record}'
+
 
     def add_address_to_record(self, *args) -> str:
         """Add address to the contact. <name> <address>"""
         if not args:
             return f'You must enter name of contact and address! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -53,7 +62,7 @@ class AddressBook(UserDict):
         """Add phone to the contact. <name> <phone>"""
         if not args:
             return f'You must enter name of contact and phone! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -71,7 +80,7 @@ class AddressBook(UserDict):
         """Add email to the contact. <name> <email>"""
         if not args:
             return f'You must enter name of contact and email! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -88,7 +97,7 @@ class AddressBook(UserDict):
         """Add date of birthday to the contact. <name> <date>"""
         if not args:
             return f'You must enter name of contact and birthday! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -105,7 +114,7 @@ class AddressBook(UserDict):
         """Edit address in the contact. <name> <old address> <new address>"""
         if not args:
             return f'You must enter name of contact and address! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -121,7 +130,7 @@ class AddressBook(UserDict):
         """Edit phone in the contact. <name> <old phone> <new phone>"""
         if not args:
             return f'You must enter name of contact and phone! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -147,7 +156,7 @@ class AddressBook(UserDict):
         """Edit email in the contact. <name> <old email> <new email>"""
         if not args:
             return f'You must enter name of contact and email! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -165,7 +174,7 @@ class AddressBook(UserDict):
         """Edit date of birthday in the contact. <name> <old date> <new date>"""
         if not args:
             return f'You must enter name of contact and birthday! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -183,7 +192,7 @@ class AddressBook(UserDict):
         """Edit name in the contact. <name> <new name>"""
         if not args:
             return f'You must enter name of contact and new name! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
@@ -207,7 +216,7 @@ class AddressBook(UserDict):
         """Remove a email from the contact. <name> <email>"""
         if not args:
             return f'You must enter name of contact! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not record.email:
@@ -220,7 +229,7 @@ class AddressBook(UserDict):
         """Remove date of birthday from the contact. <name> <date>"""
         if not args:
             return f'You must enter name of contact! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not record.birthday:
@@ -233,7 +242,7 @@ class AddressBook(UserDict):
         """Remove an address from the contact. <name> <address>"""
         if not args:
             return f'You must enter name of contact! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not record.address:
@@ -246,7 +255,7 @@ class AddressBook(UserDict):
         """Remove a phone from the contact. <name> <phone> """
         if not args:
             return f'You must enter name of contact! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         if not record.phones:
@@ -341,7 +350,7 @@ class AddressBook(UserDict):
     def show_contacts(self):
         """Show all contacts"""
         if not self.data:
-            return 'Book no contacts yet'
+            return 'There are no contacts in the book yet'
         message = 'Book has next contacts:\n'
         for count, key_record in enumerate(self.data, start=1):
             message = '\n'.join([message, f'{count}.\n{self.data[key_record]}'])

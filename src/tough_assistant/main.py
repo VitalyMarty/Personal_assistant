@@ -50,7 +50,7 @@ def main():
             # Processing user command
             result = parse_input(user_input)
 
-            # os.system('cls')
+            os.system('cls')
             # Displaying the result of command processing
             print(result)
 

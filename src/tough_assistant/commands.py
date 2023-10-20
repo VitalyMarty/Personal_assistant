@@ -43,7 +43,7 @@ command_dict ={
     'edit email': contacts.edit_email_in_record,
     'edit birthday': contacts.edit_birthday_in_record,
     'edit name': contacts.edit_name_in_record,
-    'find contact': contacts.find_record,
+    'find contact': contacts.find_contact,
     'delete contact': contacts.delete_record,
     'delete address': contacts.delete_address_from_record,
     'delete phone': contacts.delete_phone_from_record,
