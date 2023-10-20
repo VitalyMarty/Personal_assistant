@@ -24,12 +24,16 @@ class AddressBook(UserDict):
     def _find_record(self, *args):
         set_variant_of_name = list(args)
         name = ''
+        args_without_name = ''
         for i in args:
             name = ' '.join([name, set_variant_of_name.pop(0)]).strip().title()
-            record: Record = self.data.get(name, None)
-            if record:
-                args_without_name = set_variant_of_name
-                return record, args_without_name
+            search_record: Record = self.data.get(name, None)
+            if search_record:
+                record = search_record
+                args_without_name = set_variant_of_name[:]
+
+        if record:
+            return record, args_without_name
         else:
             return None, None
         
