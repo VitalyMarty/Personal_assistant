@@ -19,7 +19,7 @@ class AddressBook(UserDict):
         if record.name in self.data:
             return f"The contact with name {record.name} already exists in book"
         self.data[record.name] = record
-        return f'Added new contact {record.name} to contacts:\n\n{record}'
+        return f'Added new contact {record.name} to contacts:\n{record}'
     
     def _find_record(self, *args):
         set_variant_of_name = list(args)
@@ -40,7 +40,7 @@ class AddressBook(UserDict):
         record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
-        return f'Found contact next contact {record.name} in book.\n\n{record}'
+        return f'Found contact next contact {record.name} in book.\n{record}'
 
 
     def add_address_to_record(self, *args) -> str:
@@ -56,7 +56,7 @@ class AddressBook(UserDict):
         if record.address :
             return f'The address already exists in record {record.name}'
         record.address = address
-        return f'Added new address {record.address} to contact {record.name}.\n\n{record}'
+        return f'Added new address {record.address} to contact {record.name}.\n{record}'
     
     def add_phone_to_record(self, *args) -> str:
         """Add phone to the contact. <name> <phone>"""
@@ -74,7 +74,7 @@ class AddressBook(UserDict):
             if phone.value == new_phone.value:
                 return f'This phone number already exists in record {record.name}'
         record.phones.append(new_phone)
-        return f"Added new phone '{record.phones[-1]}' to contact {record.name}\n\n{record}"
+        return f"Added new phone '{record.phones[-1]}' to contact {record.name}\n{record}"
     
     def add_email_to_record(self, *args) -> str:
         """Add email to the contact. <name> <email>"""
@@ -91,7 +91,7 @@ class AddressBook(UserDict):
         if record.email :
             return f'The email already exists in record {record.name}'
         record.email = new_email.value
-        return f'Added new email {record.email} to contact {record.name}\n\n{record}'
+        return f'Added new email {record.email} to contact {record.name}\n{record}'
     
     def add_birthday_to_record(self, *args) -> str:
         """Add date of birthday to the contact. <name> <date>"""
@@ -108,7 +108,7 @@ class AddressBook(UserDict):
         if record.birthday :
             return f'The birthday already exists in record {record.name}'
         record.birthday = ' '.join(new_args)    #need str not datetime
-        return f'Added new birthday {record.birthday} to contact {record.name}.\n\n{record}'
+        return f'Added new birthday {record.birthday} to contact {record.name}.\n{record}'
     
     def edit_address_in_record(self, *args) -> str:
         """Edit address in the contact. <name> <old address> <new address>"""
@@ -124,7 +124,7 @@ class AddressBook(UserDict):
             return f'There is no address in contact {record.name}. You need to add first.'
         old_address = record.address
         record.address = new_address
-        return f"The old address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}''\n\n{record}"
+        return f"The address '{old_address}' was changed to a new '{record.address}' in the contact '{record.name}'\n{record}"
 
     def edit_phone_in_record(self, *args) -> str:
         """Edit phone in the contact. <name> <old phone> <new phone>"""
@@ -150,7 +150,7 @@ class AddressBook(UserDict):
                 return f'This phone number already exists in record {record.name}'
         index_old_phone = record.phones.index(old_phone)
         record.phones[index_old_phone] = new_phone
-        return f"The old phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name}'\n\n{record}"
+        return f"The phone '{old_phone.value}' was changed to a new '{new_phone.value}' in the contact '{record.name}'\n{record}"
     
     def edit_email_in_record(self, *args) -> str:
         """Edit email in the contact. <name> <old email> <new email>"""
@@ -165,10 +165,10 @@ class AddressBook(UserDict):
             return f'There is no email in contact {record.name}. You need to add first.'
         new_email = Email(' '.join(new_args))
         if not new_email.value:
-            return "The email is incorrect."
+            return "The new email is incorrect."
         old_email = record.email
         record.email = new_email.value
-        return f"The old email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}'\n\n{record}"
+        return f"The email '{old_email}' was changed to a new '{record.email}' in the contact '{record.name}'\n{record}"
     
     def edit_birthday_in_record(self, *args) -> str:
         """Edit date of birthday in the contact. <name> <old date> <new date>"""
@@ -178,7 +178,7 @@ class AddressBook(UserDict):
         if not record:
             return f'There is no contact with this name in the book'
         if not new_args:
-            return f'You must enter birthday for editing in the contact {record.name}'
+            return f'You must enter new birthday for editing in the contact {record.name}'
         if not record.birthday:
             return f'There is no birthday in contact {record.name}. You need to add first.'
         new_birthday = Birthday(' '.join(new_args))
@@ -186,7 +186,7 @@ class AddressBook(UserDict):
             return "The new birthday is incorrect."
         old_birthday = record.birthday
         record.birthday = ' '.join(new_args)
-        return f"The old birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}.'\n\n{record}"
+        return f"The birthday '{old_birthday}' was changed to a new '{record.birthday}' in the contact '{record.name}.'\n{record}"
     
     def edit_name_in_record(self, *args) -> str:
         """Edit name in the contact. <name> <new name>"""
@@ -200,13 +200,13 @@ class AddressBook(UserDict):
         old_name = record.name
         record.name = ' '.join(new_args)
         self.data[record.name] = self.data.pop(old_name)
-        return f"The old name '{old_name}' was changed to a new '{record.name}' in the contact '{record.name}'.\n\n{record}"
+        return f"The name '{old_name}' was changed to a new '{record.name}' in the contact.\n{record}"
 
     def delete_record(self, *args):
         """Remove a contact from the contacts. <name>"""
         if not args:
             return f'You must enter name of contact! Try again'
-        record, new_args = self.find_record(*args)
+        record, new_args = self._find_record(*args)
         if not record:
             return f'There is no contact with this name in the book'
         del self.data[record.name]
@@ -223,7 +223,7 @@ class AddressBook(UserDict):
             return f'There is no email in contact {record.name}. You need to add first.'
         old_email = record.email
         record.email = None
-        return f'Email {old_email} was deleted from contact {record.name}.\n\n{record}'
+        return f'Email {old_email} was deleted from contact {record.name}.\n{record}'
     
     def delete_birthday_from_record(self, *args):
         """Remove date of birthday from the contact. <name> <date>"""
@@ -236,7 +236,7 @@ class AddressBook(UserDict):
             return f'There is no birthday in contact {record.name}. You need to add first.'
         old_birthday = record.birthday
         record.birthday = None
-        return f'Birthday {old_birthday} was deleted from contact {record.name}.\n\n{record}'
+        return f'Birthday {old_birthday} was deleted from contact {record.name}.\n{record}'
 
     def delete_address_from_record(self, *args):
         """Remove an address from the contact. <name> <address>"""
@@ -249,7 +249,7 @@ class AddressBook(UserDict):
             return f'There is no address in contact {record.name}. You need to add first.'
         old_address = record.address
         record.address = None
-        return f'Address {old_address} was deleted from contact {record.name}.\n\n{record}'
+        return f'Address {old_address} was deleted from contact {record.name}.\n{record}'
     
     def delete_phone_from_record(self, *args):
         """Remove a phone from the contact. <name> <phone> """
@@ -266,7 +266,7 @@ class AddressBook(UserDict):
         if not old_phone:
             return f'There is no phone in contact with this phone'
         record.remove_phone(old_phone)
-        return f'Phone {old_phone.value} was deleted from contact {record.name}.\n\n{record}'
+        return f'Phone {old_phone.value} was deleted from contact {record.name}.\n{record}'
                 
     def _collect_recods_by_birthday(self, target_days: str):
         dict_contacts = {}
@@ -283,7 +283,9 @@ class AddressBook(UserDict):
             return f'Contacts has not birthdays within {days} days in contacts:\n'
         matching_contacts = f'Contacts has next birthdays within {days} days in contacts:'
         for name, through_days in dict_contacts.items():
-            row = f'{name} - {through_days} days'
+            add_info = 'days' if through_days > 1 else 'day'
+            through_days = f'{through_days} {add_info}' if through_days != 0 else 'Today!!!'
+            row = f'{name} - {through_days}'
             matching_contacts = '\n'.join([matching_contacts, row])
             
         return matching_contacts
