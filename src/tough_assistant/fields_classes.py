@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from contextlib import suppress
 
 
 class Field:
@@ -39,6 +40,8 @@ class Phone(Field):
     def normalize(self, value: str) -> str:
         new_value = (
             value.removeprefix("+")
+                .removeprefix("3")
+                .removeprefix("8")
                 .replace("(", "")
                 .replace(")", "")
                 .replace("-", "")
@@ -48,9 +51,9 @@ class Phone(Field):
     
     def validate(self, value: str) -> str:
         if len(value) < 10 or len(value) > 12:
-                raise ValueError(f"Phone '{value}' must contains 10 symbols.")
+                return None
         if not value.isnumeric():
-                raise ValueError(f"Phone '{value}' is wrong.")
+                return None
         return value
     
     def __eq__(self, phone):
@@ -60,21 +63,38 @@ class Phone(Field):
 class Birthday(Field):
 
     def normalize(self, birthday: str) -> str:
-        normal_birthday = datetime.strptime(birthday, '%Y-%m-%d').date()
+        normal_birthday = None
+        formats = [
+            '%Y-%m-%d',
+            '%d-%m-%Y',
+            '%Y.%m.%d',
+            '%d.%m.%Y',
+            '%Y %m %d',
+            '%d %m %Y'
+        ]
+        for format in formats:
+            try:
+                normal_birthday = datetime.strptime(birthday, format).date()
+                break
+            except Exception:
+                pass
+
         return normal_birthday
 
     def validate(self, birthday: str) -> str:
+        if not birthday:
+            return None
         today = datetime.now().date()
         if birthday > today:
-            raise ValueError(f"Birthday '{birthday}' must be less than current year and date.")
+            return None
         return birthday
     
     def get_next_birthday(self):
         today = datetime.now().date()
         next_birthday = self._value.replace(year=today.year)
         if next_birthday < today:
-            next_birthday - self._value.replace(year = today.year+1)
-        return abs(next_birthday - today).days    
+            next_birthday = self._value.replace(year = today.year+1)
+        return (next_birthday - today).days    
             
 
 class Address(Field):
@@ -84,10 +104,10 @@ class Address(Field):
 class Email(Field):
     
     def validate(self, email: str) -> str:
-        pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]*\.*[com|org|edu|ua|net]{3}$)"
+        pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]*\.*[com|org|edu|ua|net]{2}$)"
         is_valid = re.search(pattern, email)
         if not is_valid:
-            return ValueError(f"Email '{email}' is not valid.")
+            return None
         return email
     
 

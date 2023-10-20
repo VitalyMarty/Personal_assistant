@@ -45,15 +45,14 @@ def main():
         while True:
             
             # User request for action
-            user_input = prompt("\nType 'help' to view available commands. Type 'exit' to exit.\n>>> ", completer=completer)
+            user_input = prompt("Type 'help' to view available commands. Type 'exit' to exit.\n>>> ", completer=completer)
 
             # Processing user command
             result = parse_input(user_input)
 
             os.system('cls')
             # Displaying the result of command processing
-            print(result)
-
+            print(f'{result}\n------\n')
             # Termination condition. The user should enter a command: close | exit | good bye
             if result == 'Good Bye!':
                 break
