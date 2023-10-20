@@ -1,7 +1,7 @@
-from address_book import contacts
-from note_book import notes
-from file_generator import main_generator
-from file_sorter import sort_and_rename_files
+from tough_assistant.address_book import contacts
+from tough_assistant.note_book import notes
+from tough_assistant.file_generator import main_generator
+from tough_assistant.file_sorter import sort_and_rename_files
 
 
 def get_help():
