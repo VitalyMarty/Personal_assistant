@@ -91,6 +91,8 @@ def generator_folders_and_files(path):
 
 def main_generator(path=None):
     """Generate folder with random files and other folders in it"""
+    if not path:
+        return f'You need enter a folder where will be generate random files'
     parent_folder = Path(path)
     parent_folder.mkdir(parents=True, exist_ok=True)
     print(f'{parent_folder = }')
