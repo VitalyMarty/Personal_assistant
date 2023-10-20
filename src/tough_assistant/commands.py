@@ -45,6 +45,7 @@ command_dict ={
     'edit name': contacts.edit_name_in_record,
     'find contact': contacts.find_contact,
     'delete contact': contacts.delete_record,
+    'delete all contacts': contacts.delete_all_records,
     'delete address': contacts.delete_address_from_record,
     'delete phone': contacts.delete_phone_from_record,
     'delete email': contacts.delete_email_from_record,

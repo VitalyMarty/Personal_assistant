@@ -216,6 +216,13 @@ class AddressBook(UserDict):
         del self.data[record.name]
         return f'Contact {record.name} was deleted from contacts'
     
+    def delete_all_records(self):
+        """Remove all contacts from the contact book"""
+        if not self.data:
+            return 'The contact book is already empty.'
+        self.data = {}
+        return f'All contacts have been removed from the contact book.'
+    
     def delete_email_from_record(self, *args):
         """Remove a email from the contact. <name> <email>"""
         if not args:
